@@ -7,7 +7,7 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
-use app\models\ContactForm;
+use app\models\Sourse;
 
 class SiteController extends Controller
 {
@@ -19,7 +19,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout','index','login'],
+                'only' => ['logout','index','login', 'sourse'],
                 'rules' => [
                     [
                         'actions' => ['logout'],
@@ -32,7 +32,7 @@ class SiteController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['index'],
+                        'actions' => ['index', 'sourse'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
@@ -71,7 +71,35 @@ class SiteController extends Controller
     public function actionIndex()
     {
         return $this->render('index');
+
     }
+
+    /**
+     * Displays sourse.
+     *
+     * @return string
+     */
+    public function actionSourse()
+    {
+        $sourse = new Sourse();
+
+        if ($sourse->load(Yii::$app->request->post())) {
+            $sourse->status = Sourse::STATUS_ACTIVE;
+            if (Sourse::find()->where(['or',['name' => trim($sourse->name)],['url' => trim($sourse->url)]])->limit(1)->one() == NULL) {
+                if ($sourse->save()) {
+                
+                }
+            }
+            
+        }
+
+        return $this->render('sourse',[
+            'sourses' => Sourse::find()->all(),
+            'sourse' => $sourse,
+        ]);
+    }
+
+
 
     /**
      * Login action.

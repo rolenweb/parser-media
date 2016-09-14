@@ -36,7 +36,8 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index'], 'visible' => Yii::$app->user->can('admin')],
+            ['label' => 'Главная', 'url' => ['/site/index'], 'visible' => Yii::$app->user->can('admin')],
+            ['label' => 'Ресурсы', 'url' => ['/site/sourse'], 'visible' => Yii::$app->user->can('admin')],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (
