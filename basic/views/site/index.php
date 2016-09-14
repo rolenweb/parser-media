@@ -1,53 +1,56 @@
 <?php
-
+use yii\helpers\Html;
 /* @var $this yii\web\View */
 
-$this->title = 'My Yii Application';
+$this->title = 'Parser Media';
+
+echo Html::beginTag('div',['class' => 'row']);
+    echo Html::beginTag('div',['class' => 'col-sm-12']);
+        echo Html::beginTag('div',['class' => 'table-responsive']);
+            echo Html::beginTag('table',['class' => 'table table-bordered']);
+                echo Html::beginTag('col',['width' => '330', 'valign' => 'top']);
+                echo Html::beginTag('thead');
+                    echo Html::beginTag('tr');
+                        echo Html::beginTag('th');
+                            echo Html::beginTag('ul',['class' => 'list-inline']);
+                                echo Html::beginTag('li');
+                                    echo Html::beginTag('span');
+                                        echo 'РУС(3)';
+                                    echo Html::endTag('span');
+                                echo Html::endTag('li');
+                                echo Html::beginTag('li');
+                                    echo Html::beginTag('span');
+                                        echo 'ENG(3)';
+                                    echo Html::endTag('span');
+                                echo Html::endTag('li');
+                                echo Html::beginTag('li');
+                                    echo Html::beginTag('span');
+                                        echo 'ПАРТНЕРЫ(3)';
+                                    echo Html::endTag('span');
+                                echo Html::endTag('li');
+                            echo Html::endTag('ul');
+                        echo Html::endTag('th');
+                        echo Html::beginTag('th',['colspan' => 2]);
+                            echo Html::tag('h4','Название сюжета');
+                        echo Html::endTag('th');
+
+                    echo Html::endTag('tr');
+                echo Html::endTag('thead');
+                echo Html::beginTag('tbody');
+                    echo Html::beginTag('tr');
+                        echo Html::beginTag('td');
+                            echo "content here";
+                        echo Html::endTag('td');
+                        echo Html::beginTag('td');
+                            echo "content here";
+                        echo Html::endTag('td');
+                        echo Html::beginTag('td');
+                            echo "content here";
+                        echo Html::endTag('td');
+                    echo Html::endTag('tr');
+                echo Html::endTag('tbody');
+            echo Html::endTag('table');
+        echo Html::endTag('div');
+    echo Html::endTag('div');
+echo Html::endTag('div');
 ?>
-<div class="site-index">
-
-    <div class="jumbotron">
-        <h1>Congratulations!</h1>
-
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
-    </div>
-
-    <div class="body-content">
-
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
-            </div>
-        </div>
-
-    </div>
-</div>
