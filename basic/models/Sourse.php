@@ -99,4 +99,9 @@ class Sourse extends \yii\db\ActiveRecord
             self::STATUS_PENDING => 'Паура',
         ];
     }
+
+    public static function ddList()
+    {
+        return self::find()->where(['status' => self::STATUS_ACTIVE])->all();
+    }
 }

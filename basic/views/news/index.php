@@ -4,13 +4,13 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\ParseKeySearch */
+/* @var $searchModel app\models\NewsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Ключи для парсинга';
+$this->title = 'Список новостей';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="parse-key-index">
+<div class="news-index">
 
     <h3><?= Html::encode($this->title) ?></h3>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -18,21 +18,40 @@ $this->params['breadcrumbs'][] = $this->title;
     
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        
+        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
+            [
+                'attribute'=>'title',
+                'label' => 'Название',
+               
+            ],
             
             [
-                'attribute'=>'key',
-                'label' => 'Ключи',
+                'attribute'=>'preview',
+                'label' => 'Превью',
+                'content'=>function($data){
+                    return $data->preview;
+                }
+                
+            ],
+            'url:url',
+            //'description_id',
+            [
+                'attribute'=>'resourse_id',
+                'label' => 'Ресурс',
+                'content'=>function($data){
+                    return $data->sourse->name;
+                }
+                
             ],
             [
-                'attribute'=>'type',
-                'label' => 'Тип',
+                'attribute'=>'parse_key_id',
+                'label' => 'Ключ',
                 'content'=>function($data){
-                    return $data->typeName;
+                    return $data->parseKey->key;
                 }
                 
             ],
@@ -64,7 +83,4 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
-    <p class="text-right">
-        <?= Html::a('Создать', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
 </div>
