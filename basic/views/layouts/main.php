@@ -37,7 +37,7 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             ['label' => 'Главная', 'url' => ['/site/index'], 'visible' => Yii::$app->user->can('admin')],
-            ['label' => 'Ресурсы', 'url' => ['/site/sourse'], 'visible' => Yii::$app->user->can('admin')],
+            ['label' => 'Ресурсы', 'url' => ['/sourse/index'], 'visible' => Yii::$app->user->can('admin')],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (

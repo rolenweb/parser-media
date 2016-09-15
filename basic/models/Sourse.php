@@ -83,4 +83,20 @@ class Sourse extends \yii\db\ActiveRecord
             return 'Пауза';
         }
     }
+
+    public static function ddType()
+    {
+        return [
+            self::TYPE_MEDIA => 'СМИ',
+            self::TYPE_RSS => 'RSS',
+        ];
+    }
+
+    public static function ddStatus()
+    {
+        return [
+            self::STATUS_ACTIVE => 'Активные',
+            self::STATUS_PENDING => 'Паура',
+        ];
+    }
 }

@@ -19,7 +19,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout','index','login', 'sourse'],
+                'only' => ['logout','index','login'],
                 'rules' => [
                     [
                         'actions' => ['logout'],
@@ -32,7 +32,7 @@ class SiteController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['index', 'sourse'],
+                        'actions' => ['index'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
@@ -74,31 +74,7 @@ class SiteController extends Controller
 
     }
 
-    /**
-     * Displays sourse.
-     *
-     * @return string
-     */
-    public function actionSourse()
-    {
-        $sourse = new Sourse();
-
-        if ($sourse->load(Yii::$app->request->post())) {
-            $sourse->status = Sourse::STATUS_ACTIVE;
-            if (Sourse::find()->where(['or',['name' => trim($sourse->name)],['url' => trim($sourse->url)]])->limit(1)->one() == NULL) {
-                if ($sourse->save()) {
-                
-                }
-            }
-            
-        }
-
-        return $this->render('sourse',[
-            'sourses' => Sourse::find()->all(),
-            'sourse' => $sourse,
-        ]);
-    }
-
+    
 
 
     /**
