@@ -38,6 +38,7 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'Главная', 'url' => ['/site/index'], 'visible' => Yii::$app->user->can('admin')],
             ['label' => 'Ресурсы', 'url' => ['/sourse/index'], 'visible' => Yii::$app->user->can('admin')],
+            ['label' => 'Ключи для парсинга', 'url' => ['/parse-key/index'], 'visible' => Yii::$app->user->can('admin')],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (
