@@ -133,10 +133,14 @@ class SubjectParserController extends Controller
                     $news = new News();
                     $news->title = $title;
                     $news->url = $data['links'][$key];
-                    $news->preview = $data['description'][$key];
+                    if (isset($data['description'][$key])) {
+                        $news->preview = $data['description'][$key];
+                    }
                     $news->subject_id = $subject->id;
                     $news->status = News::STATUS_SPIDER;
-                    $news->time = strtotime(date("Y-m-d").' '.$data['time'][$key]);
+                    if (isset($data['time'][$key])) {
+                        $news->time = strtotime(date("Y-m-d").' '.$data['time'][$key]);
+                    }
                     $news->save();
                 }
             }    
