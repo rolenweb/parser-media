@@ -41,8 +41,7 @@ class Recognize
 	    if ($ext=="gif") $conttype="image/gif";
 	    if ($ext=="png") $conttype="image/png";
 	   
-	    var_dump($ext);
-	    die;
+	    $conttype="image/gif";
 	    
 	    $boundary="---------FGf4Fh3fdjGQ148fdh";
 	    
