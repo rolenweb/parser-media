@@ -8,6 +8,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\Sourse;
+use app\models\Subject;
 
 class SiteController extends Controller
 {
@@ -70,7 +71,10 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $subjects = Subject::find()->where(['status' => Subject::STATUS_SPIDER])->orderBy(['created_at' => SORT_DESC])->all();
+        return $this->render('index',[
+            'subjects' => $subjects,
+            ]);
 
     }
 

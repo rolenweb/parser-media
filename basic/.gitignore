@@ -16,6 +16,8 @@ Thumbs.db
 /vendor
 /config/db.php
 /config/params.php
+/cookiefile
+/recognize
 
 # composer itself is not needed
 composer.phar

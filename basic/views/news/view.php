@@ -32,11 +32,11 @@ $this->params['breadcrumbs'][] = $this->title;
             //'description_id',
             [
                 'label' => 'Ключ',
-                'value' => $model->sourse->name,
+                //'value' => $model->sourse->name,
             ],
             [
                 'label' => 'Ключ',
-                'value' => $model->parseKey->key,
+                //'value' => $model->parseKey->key,
             ],
             [
                 'label' => 'Статус',

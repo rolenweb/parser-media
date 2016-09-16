@@ -39,7 +39,9 @@ echo Html::beginTag('div',['class' => 'row']);
                 echo Html::beginTag('tbody');
                     echo Html::beginTag('tr');
                         echo Html::beginTag('td');
-                            echo "content here";
+                            echo $this->render('subject/_list',[
+                                'subjects' => $subjects,
+                                ]);
                         echo Html::endTag('td');
                         echo Html::beginTag('td');
                             echo "content here";

@@ -37,13 +37,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
                 
             ],
-            'url:url',
+            //'url:url',
             //'description_id',
             [
                 'attribute'=>'resourse_id',
                 'label' => 'Ресурс',
                 'content'=>function($data){
-                    return $data->sourse->name;
+                    if ($data->sourse !== NULL) {
+                        return $data->sourse->name;
+                    }
+                    
                 }
                 
             ],
@@ -51,7 +54,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute'=>'parse_key_id',
                 'label' => 'Ключ',
                 'content'=>function($data){
-                    return $data->parseKey->key;
+                    if ($data->parseKey !== NULL) {
+                        return $data->parseKey->key;
+                    }
+                    
                 }
                 
             ],

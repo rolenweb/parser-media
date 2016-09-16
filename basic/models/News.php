@@ -46,7 +46,7 @@ class News extends \yii\db\ActiveRecord
     {
         return [
             [['preview'], 'string'],
-            [['description_id', 'resourse_id', 'parse_key_id', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['description_id', 'resourse_id', 'parse_key_id', 'status', 'created_at', 'updated_at', 'subject_id','time'], 'integer'],
             [['title', 'url'], 'string', 'max' => 255],
         ];
     }
@@ -105,5 +105,10 @@ class News extends \yii\db\ActiveRecord
     public function getDescription()
     {
         return $this->hasOne(Description::className(), ['id' => 'description_id']);
+    }
+
+    public function getSubject()
+    {
+        return $this->hasOne(Subject::className(), ['id' => 'subject_id']);
     }
 }
