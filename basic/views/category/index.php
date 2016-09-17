@@ -4,13 +4,13 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\ParseKeySearch */
+/* @var $searchModel app\models\CategorySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Ключи для парсинга';
+$this->title = 'Категории';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="parse-key-index">
+<div class="category-index">
 
     <h3><?= Html::encode($this->title) ?></h3>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -18,23 +18,17 @@ $this->params['breadcrumbs'][] = $this->title;
     
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        
+
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            
             [
-                'attribute'=>'key',
-                'label' => 'Ключи',
+                'attribute' => 'name',
+                'label' => 'Название',
             ],
             [
-                'attribute'=>'type',
-                'label' => 'Тип',
-                'content'=>function($data){
-                    return $data->typeName;
-                }
-                
+                'attribute' => 'value',
+                'label' => 'Значение',
             ],
             [
                 'attribute' => 'sourse_id',
@@ -75,7 +69,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
+
     <p class="text-right">
-        <?= Html::a('Создать', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 </div>

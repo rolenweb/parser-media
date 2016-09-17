@@ -46,7 +46,7 @@ class News extends \yii\db\ActiveRecord
     {
         return [
             [['preview'], 'string'],
-            [['description_id', 'resourse_id', 'parse_key_id', 'status', 'created_at', 'updated_at', 'subject_id','time'], 'integer'],
+            [['description_id', 'resourse_id', 'parse_key_id', 'status', 'created_at', 'updated_at', 'subject_id','time', 'news_site_id'], 'integer'],
             [['title', 'url'], 'string', 'max' => 255],
         ];
     }
@@ -95,6 +95,11 @@ class News extends \yii\db\ActiveRecord
     public function getSourse()
     {
         return $this->hasOne(Sourse::className(), ['id' => 'resourse_id']);
+    }
+
+    public function getSmi()
+    {
+        return $this->hasOne(NewsSites::className(), ['id' => 'news_site_id']);
     }
 
     public function getParseKey()

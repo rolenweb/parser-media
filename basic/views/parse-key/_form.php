@@ -1,9 +1,11 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 
 use app\models\ParseKey;
+use app\models\Sourse;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\ParseKey */
@@ -19,6 +21,8 @@ use app\models\ParseKey;
             <?= $form->field($model, 'key')->textInput(['maxlength' => true]) ?>
 
             <?= $form->field($model, 'type')->dropDownList(ParseKey::ddType()) ?>
+
+            <?= $form->field($model, 'sourse_id')->dropDownList(ArrayHelper::map(Sourse::ddList(), 'id', 'name')) ?>
 
             <?= $form->field($model, 'status')->dropDownList(ParseKey::ddStatus()) ?>
 

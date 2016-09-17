@@ -43,7 +43,7 @@ class ParseKey extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['type', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['type', 'status', 'created_at', 'updated_at', 'sourse_id'], 'integer'],
             [['key'], 'string', 'max' => 255],
         ];
     }
@@ -61,6 +61,11 @@ class ParseKey extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public function getSourse()
+    {
+        return $this->hasOne(Sourse::className(), ['id' => 'sourse_id']);
     }
 
     public function getTypeName()

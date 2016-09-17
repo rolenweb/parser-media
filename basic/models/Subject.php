@@ -66,12 +66,54 @@ class Subject extends \yii\db\ActiveRecord
 
     public function getNews()
     {
-        return $this->hasMany(News::className(), ['subject_id' => 'id']);
+        return $this->hasMany(News::className(), ['subject_id' => 'id'])
+            ->with('smi');
     }
 
     public function getFirstNews()
     {
         return $this->hasOne(News::className(), ['subject_id' => 'id'])
             ->orderBy(['created_at' => SORT_DESC]);
+    }
+
+    public function getCategories()
+    {
+        return $this->hasMany(Category::className(), ['id' => 'category_id'])
+            ->viaTable('subject_category', ['subject_id' => 'id']);
+    }
+
+    public function titleSmi($format = 'arr')
+    {
+        $out = [];
+        $news = $this->news;
+        if (empty($news) === false) {
+            foreach ($news as $item) {
+                if ($item->smi !== null) {
+                    $out[] = $item->smi->name;
+                }
+            }
+        }
+
+        if ($format === 'arr') {
+            return array_unique($out);
+        }else{
+            return $this->formatListNameSmi(array_unique($out));
+        }   
+        
+    }
+
+    public function formatListNameSmi($list)
+    {
+        $out = '';
+        if (empty($list) === false) {
+            foreach ($list as $key => $item) {
+                if ($key == 0) {
+                    $out = $item;
+                }else{
+                    $out .= ', '.$item;
+                }
+            }
+        }
+        return $out;
     }
 }

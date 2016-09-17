@@ -4,13 +4,13 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\ParseKey */
+/* @var $model app\models\Category */
 
-$this->title = $model->key;
-$this->params['breadcrumbs'][] = ['label' => 'Ключи для парсинга', 'url' => ['index']];
+$this->title = $model->name;
+$this->params['breadcrumbs'][] = ['label' => 'Категории', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="parse-key-view">
+<div class="category-view">
 
     <h3><?= Html::encode($this->title) ?></h3>
 
@@ -19,14 +19,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
             [
-                'label' => 'Ключ',
-                'value' => $model->key,
+                'label' => 'Название',
+                'value' => $model->name,
             ],
             [
-                'label' => 'Тип',
-                'value' => $model->typeName,
+                'label' => 'Значение',
+                'value' => $model->value,
             ],
             [
                 'label' => 'Ресурс',

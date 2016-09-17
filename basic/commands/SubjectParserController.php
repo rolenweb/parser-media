@@ -15,9 +15,13 @@ use app\commands\tools\SymfonyParser;
 use Symfony\Component\DomCrawler\Link;
 use app\commands\tools\Recognize;
 
+use app\models\Sourse;
 use app\models\Setting;
 use app\models\Subject;
 use app\models\News;
+use app\models\Category;
+use app\models\SubjectCategory;
+use app\models\NewsSites;
 
 /**
  * This command echoes the first argument that you have entered.
@@ -35,16 +39,31 @@ class SubjectParserController extends Controller
      */
     public function actionIndex()
     {
-        $content = $this->gom_yt('https://news.yandex.ru/yandsearch?text=&rpt=nnews2&grhow=clutop&catnews=51&catnews=5&catnews=49&catnews=4&catnews=636&within=7&from_day=&from_month=&from_year=&to_day=&to_month=&to_year=&numdoc=30');
+        $sourse = Sourse::findOne(['name' => 'yandex']);
+        if ($sourse === NULL) {
+            return 'Sourse not found';
+        }
+
+        if (empty($sourse->keysParse) === false) {
+            foreach ($sourse->keysParse as $key) {
+                $content = $this->gom_yt($sourse->urlParse($key));
+            }
+        }else{
+            $content = $this->gom_yt($sourse->urlParse());
+        }
+        
+        //$content = $this->gom_yt('https://news.yandex.ru/yandsearch?text=&rpt=nnews2&grhow=clutop&catnews=51&catnews=5&catnews=49&catnews=4&catnews=636&within=7&from_day=&from_month=&from_year=&to_day=&to_month=&to_year=&numdoc=30');
 
         $list_url_subjesct = $this->listSubject($content);
 
-        $this->parseListSubject($list_url_subjesct);
+        $this->parseListSubject($list_url_subjesct,$sourse);
 
         
     }
 
-    public function parseListSubject($in)
+
+
+    public function parseListSubject($in,$sourse)
     {
         if (empty($in)) {
             return 'The array of subject is NULL';
@@ -55,9 +74,9 @@ class SubjectParserController extends Controller
             
             if (empty($subject) === false) {
                 if (isset($subject['subject_title'])) {
-                    $saved_subject = $this->saveSubject($subject['subject_title'][0]);
+                    $saved_subject = $this->saveSubject($subject['subject_title'][0],$item,$sourse);
                 }
-                if (isset($subject['links']) && isset($subject['description']) && isset($subject['title']) && $saved_subject !== NULL) {
+                if (isset($subject['links']) && isset($subject['description']) && isset($subject['title'])) {
                     $this->saveNews($subject,$saved_subject);
                 }
                 
@@ -113,15 +132,24 @@ class SubjectParserController extends Controller
         return $result;
     }
 
-    public function saveSubject($title)
+    public function saveSubject($title,$url,$sourse)
     {
-        if (Subject::findOne(['title' => $title]) === NULL) {
+        $subject = Subject::findOne(['title' => $title]);
+        if ($subject === NULL) {
+
             $new_subject = new Subject();
             $new_subject->title = $title;
+            $new_subject->url = $url;
+            $new_subject->resourse_id = $sourse->id;
             $new_subject->status = Subject::STATUS_SPIDER;
             if ($new_subject->save()) {
+                if (Yii::$app->cache->get('sourse_'.$sourse->id) !== false) {
+                    $this->saveLinkCategory(Yii::$app->cache->get('sourse_'.$sourse->id),$new_subject);
+                }
                 return $new_subject;
             }
+        }else{
+            return $subject;
         }
     }
 
@@ -130,6 +158,8 @@ class SubjectParserController extends Controller
         foreach ($data['title'] as $key => $title) {
             if (isset($data['links'][$key])) {
                 if (News::findOne(['url' => $data['links'][$key]]) === NULL) {
+                    
+                    
                     $news = new News();
                     $news->title = $title;
                     $news->url = $data['links'][$key];
@@ -141,11 +171,40 @@ class SubjectParserController extends Controller
                     if (isset($data['time'][$key])) {
                         $news->time = strtotime(date("Y-m-d").' '.$data['time'][$key]);
                     }
+                    $arr_url = parse_url($data['links'][$key]);
+                    if (empty($arr_url['host']) === false) {
+                        $host = trim($arr_url['host']);
+                        $smi = NewsSites::find()->where(['like','url',$host])->limit(1)->one();
+                        if ($smi !== null) {
+                            $news->news_site_id = $smi->id;
+                        }
+                    }
                     $news->save();
                 }
             }    
         }
         
+    }
+
+    public function saveLinkCategory($arr,$subject)
+    {
+        foreach ($arr as $item) {
+            if (empty($item['catnews']) === false) {
+                $categoris = Category::find()->where(['and',['value' => $item['catnews']],['status' => Category::STATUS_ACTIVE]])->all();
+                if (empty($categoris) === false) {
+                    foreach ($categoris as $cat) {
+                        $new_link = new SubjectCategory();
+                        $new_link->subject_id = $subject->id;
+                        $new_link->category_id = $cat->id;
+                        $new_link->save();
+                    }
+                }
+            }
+            if (empty($item['keyword']) === false) {
+                $subject->parse_key_id = $item['keyword'];
+                $subject->save();
+            }
+        }
     }
 
         
