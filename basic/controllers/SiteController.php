@@ -20,7 +20,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout','index','login'],
+                'only' => ['logout','index','login','load-details-subject'],
                 'rules' => [
                     [
                         'actions' => ['logout'],
@@ -33,7 +33,7 @@ class SiteController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['index'],
+                        'actions' => ['index','load-details-subject'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
@@ -113,31 +113,40 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
-    /**
-     * Displays contact page.
-     *
-     * @return string
-     */
-    public function actionContact()
+    public function actionLoadDetailsSubject()
     {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
+        if(Yii::$app->request->isAjax){
 
-            return $this->refresh();
+            $error = [];
+            $info = [];
+
+            $post_data = Yii::$app->request->post();
+
+            if (!isset($post_data)) {
+                $error[] = 'The post data is not set';
+                return $this->renderAjax('_result', [
+                    'error' => $error,
+                ]);
+            }
+
+            $subject = Subject::findOne($post_data['subject']);
+
+            if ($subject === null) {
+                $error[] = 'The subject is not found';
+                return $this->renderAjax('_result', [
+                    'error' => $error,
+                ]);
+            }
+
+            return $this->renderAjax('subject/_single_details', [
+                    'subject' => $subject,
+            ]);
+            
+
         }
-        return $this->render('contact', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Displays about page.
-     *
-     * @return string
-     */
-    public function actionAbout()
-    {
-        return $this->render('about');
+        else{
+            Yii::$app->session->setFlash('error', 'Fuck, hands off of this page.');
+            return $this->redirect(['site/index']);
+        }
     }
 }

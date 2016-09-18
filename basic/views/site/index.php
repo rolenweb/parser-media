@@ -30,7 +30,7 @@ echo Html::beginTag('div',['class' => 'row']);
                                 echo Html::endTag('li');
                             echo Html::endTag('ul');
                         echo Html::endTag('th');
-                        echo Html::beginTag('th',['colspan' => 2]);
+                        echo Html::beginTag('th',['colspan' => 2, 'name' => 'title-subject']);
                             echo Html::tag('h4','Название сюжета');
                         echo Html::endTag('th');
 
@@ -44,7 +44,13 @@ echo Html::beginTag('div',['class' => 'row']);
                                 ]);
                         echo Html::endTag('td');
                         echo Html::beginTag('td');
-                            echo "content here";
+                            echo Html::beginTag('div');
+
+                            echo Html::endTag('div');
+
+                            echo Html::beginTag('div',['name' => 'block-details-subject', 'class' => 'block-details-subject']);
+                                
+                            echo Html::endTag('div');
                         echo Html::endTag('td');
                         echo Html::beginTag('td');
                             echo "content here";

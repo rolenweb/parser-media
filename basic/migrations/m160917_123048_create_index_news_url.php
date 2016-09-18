@@ -6,12 +6,12 @@ class m160917_123048_create_index_news_url extends Migration
 {
     public function up()
     {
-        $this->createIndex('idx-news-url', '{{%news}}', ['url']);
+        //$this->createIndex('idx-news-url', '{{%news}}', ['url']);
     }
 
     public function down()
     {
-        $this->dropIndex('idx-news-url', '{{%news}}');
+        //$this->dropIndex('idx-news-url', '{{%news}}');
     }
 
 

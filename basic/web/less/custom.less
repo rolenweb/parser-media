@@ -1,0 +1,38 @@
+@active-color: #ccc;
+@border-color: #ccc;
+
+div.container{
+
+	div.block-list-subject{
+		height: 500px;
+		overflow-y: scroll;
+
+		div[name = "sigle-subject"]{
+			&:hover{
+				cursor: pointer;
+			}
+
+		}
+		div.active-subject{
+			background-color: @active-color;
+		}
+	}
+	div.block-details-subject{
+		height: 500px;
+		overflow-y: scroll;
+		div.row-title{
+			border-top: 1px solid @border-color;
+			border-bottom: 1px solid @border-color;
+			margin-left: -10px;
+			margin-right: -10px;
+			span.title{
+				text-transform: uppercase;
+				font-size: 18px;
+			}
+		}
+		div.list-smi{
+			margin-left: 0px;
+			margin-right: 0px;
+		}
+	}
+}

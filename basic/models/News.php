@@ -107,13 +107,15 @@ class News extends \yii\db\ActiveRecord
         return $this->hasOne(ParseKey::className(), ['id' => 'parse_key_id']);
     }
 
-    public function getDescription()
+    public function getNewsFullText()
     {
-        return $this->hasOne(Description::className(), ['id' => 'description_id']);
+        return $this->hasOne(NewsFullText::className(), ['news_id' => 'id']);
     }
 
     public function getSubject()
     {
         return $this->hasOne(Subject::className(), ['id' => 'subject_id']);
     }
+
+
 }

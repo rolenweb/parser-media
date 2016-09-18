@@ -4,6 +4,11 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+
+use app\models\News;
+use app\models\NewsFullText;
+
+use app\commands\tools\NewsParser;
 /**
  * This is the model class for table "sourse".
  *
@@ -183,5 +188,109 @@ class Sourse extends \yii\db\ActiveRecord
         $cache->set($key,$this->paramsUrlArray($url,$cat,$keyword));
         
         return;
+    }
+
+    public function fullTextParseYandex()
+    {
+         $news = News::find()
+            ->joinWith(['subject.sourse'])
+            ->where([
+                    'and',
+                        [
+                            'sourse.name' => 'yandex' 
+                        ],
+                        [
+                            'news.status' => News::STATUS_SPIDER,
+                        ],
+                        $this->listRequestYandexFullText,
+                ])
+            ->all();//->createCommand()->sql;
+        if (empty($news) === true) {
+            return 'There are not news for parsing';
+        }
+
+        $parser = new NewsParser();
+        foreach ($news as $item) {
+            var_dump($item->url);
+            if ($item->url !== null) {
+                $content = $parser->parsePage($item->url);
+                if ($content !== null) {
+                    $new_text = new NewsFullText();
+                    $new_text->text = $content;
+                    $new_text->news_id = $item->id;
+                    $new_text->save();
+
+                }
+            }
+            $item->status = $item::STATUS_CRAWLER;
+            $item->save();
+        }    
+    }
+
+    public function getListRequestYandexFullText()
+    {
+        return [    
+                    'or',
+                                [
+                                    'like','news.url','gazeta.ru',
+                                ],
+                                [
+                                    'like','news.url','vedomosti.ru',
+                                ],
+                                [
+                                    'like','news.url','rns.online',
+                                ],
+                                [
+                                    'like','news.url','izvestia.ru',
+                                ],
+                                [
+                                    'like','news.url','kommersant.ru',
+                                ],
+                                [
+                                    'like','news.url','cnews.ru',
+                                ],
+                                [
+                                    'like','news.url','rbc.ru',
+                                ],
+                                [
+                                    'like','news.url','therunet.com',
+                                ],
+                                [
+                                    'like','news.url','ria.ru',
+                                ],
+                                [
+                                    'like','news.url','tass.ru',
+                                ],
+                                [
+                                    'like','news.url','lenta.ru',
+                                ],
+                                [
+                                    'like','news.url','ura.ru',
+                                ],
+                                [
+                                    'like','news.url','securitylab.ru',
+                                ],
+                                [
+                                    'like','news.url','regnum.ru',
+                                ],
+                                [
+                                    'like','news.url','rusnovosti.ru',
+                                ],
+                                [
+                                    'like','news.url','vc.ru',
+                                ],
+                                [
+                                    'like','news.url','sostav.ru',
+                                ],
+                                [
+                                    'like','news.url','adindex.ru',
+                                ],
+                                [
+                                    'like','news.url','3dnews.ru',
+                                ],
+                                [
+                                    'like','news.url','bfm.ru',
+                                ]
+        ];
     }
 }

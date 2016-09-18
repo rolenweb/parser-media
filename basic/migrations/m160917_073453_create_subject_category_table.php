@@ -20,7 +20,7 @@ class m160917_073453_create_subject_category_table extends Migration
             'updated_at' => $this->integer(),
         ]);
 
-        $this->createIndex('idx-subject_category-subject_id-category_id', '{{%subject_category}}', ['subject_id', 'category_id']);
+//        $this->createIndex('idx-subject_category-subject_id-category_id', '{{%subject_category}}', ['subject_id', 'category_id']);
     }
 
     /**
@@ -28,7 +28,7 @@ class m160917_073453_create_subject_category_table extends Migration
      */
     public function down()
     {
-        $this->dropIndex('idx-subject_category-subject_id-category_id', '{{%subject_category}}');
+  //      $this->dropIndex('idx-subject_category-subject_id-category_id', '{{%subject_category}}');
         $this->dropTable('subject_category');
     }
 }

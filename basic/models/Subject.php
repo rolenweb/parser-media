@@ -64,6 +64,11 @@ class Subject extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getSourse()
+    {
+        return $this->hasOne(Sourse::className(), ['id' => 'resourse_id']);
+    }
+
     public function getNews()
     {
         return $this->hasMany(News::className(), ['subject_id' => 'id'])

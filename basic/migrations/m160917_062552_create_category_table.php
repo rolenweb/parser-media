@@ -22,7 +22,7 @@ class m160917_062552_create_category_table extends Migration
             'updated_at' => $this->integer(),
         ]);
 
-        $this->createIndex('idx-category-name-value', '{{%category}}', ['name', 'value']);
+        //$this->createIndex('idx-category-name-value', '{{%category}}', ['name', 'value']);
     }
 
     /**
@@ -30,7 +30,7 @@ class m160917_062552_create_category_table extends Migration
      */
     public function down()
     {
-        $this->dropIndex('idx-category-name-value', '{{%category}}');
+        //$this->dropIndex('idx-category-name-value', '{{%category}}');
         $this->dropTable('category');
     }
 }
