@@ -5,6 +5,7 @@ $(function() {
 		activeSingleSubject($(this));
 		titleSubjectReplace($(this));
 		loadDetailsSubject($(this));
+		numberSubjectReplace($(this));
 	});
 
 	function activeSingleSubject(obj) {
@@ -19,6 +20,10 @@ $(function() {
 
 	function titleSubjectReplace(obj) {
 		home.find('th[name = "title-subject"]').text(obj.find('h4[name = "title-silgle-subject"]').text());
+	}
+
+	function numberSubjectReplace(obj) {
+		home.find('div.pult-details-subject span.title span.number').text(obj.find('span.number').text());
 	}
 
 	function loadDetailsSubject(obj) {
@@ -37,4 +42,11 @@ $(function() {
         	}
         );
 	}
+
+	tinymce.init(
+    	{ 
+        	selector:'div[name = "block-template-news"] [name = "text"]',
+        	height : 300
+    	}
+    );
 });

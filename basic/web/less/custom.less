@@ -4,7 +4,8 @@
 div.container{
 
 	div.block-list-subject{
-		height: 500px;
+		height: 800px;
+
 		overflow-y: scroll;
 
 		div[name = "sigle-subject"]{
@@ -16,23 +17,56 @@ div.container{
 		div.active-subject{
 			background-color: @active-color;
 		}
+		div.block-list-news{
+			width: 100%;
+			padding: 1px 5px;
+			background-color: @border-color;
+		}
 	}
-	div.block-details-subject{
-		height: 500px;
-		overflow-y: scroll;
+	div.pult-details-subject{
 		div.row-title{
 			border-top: 1px solid @border-color;
 			border-bottom: 1px solid @border-color;
-			margin-left: -10px;
-			margin-right: -10px;
+			margin-left: -9px;
+			margin-right: -9px;
 			span.title{
 				text-transform: uppercase;
 				font-size: 18px;
 			}
 		}
+		div.sort-list-smi{
+			margin-left: -9px;
+			margin-right: -9px;
+			background-color: @border-color;
+			padding: 5px 10px;
+			label.control-label{
+				padding-top: 0px;
+			}
+		}
+	}
+	div.block-details-subject{
+		height: 500px;
+		overflow-y: scroll;
+		
+		
 		div.list-smi{
 			margin-left: 0px;
 			margin-right: 0px;
+			li.title-smi{
+				margin-top: 5px;
+
+				span.label{
+					font-size: 100%;
+				}	
+			}
+			li.title-news{
+				h4{
+					margin-top: 5px;
+					margin-bottom: 0px;
+				}
+			}
+			
 		}
+
 	}
 }

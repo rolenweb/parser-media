@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\Html;
 use yii\behaviors\TimestampBehavior;
 /**
  * This is the model class for table "subject".
@@ -72,8 +73,10 @@ class Subject extends \yii\db\ActiveRecord
     public function getNews()
     {
         return $this->hasMany(News::className(), ['subject_id' => 'id'])
-            ->with('smi');
+            ->with(['smi','newsFullText']);
     }
+
+    
 
     public function getFirstNews()
     {
@@ -113,9 +116,9 @@ class Subject extends \yii\db\ActiveRecord
         if (empty($list) === false) {
             foreach ($list as $key => $item) {
                 if ($key == 0) {
-                    $out = $item;
+                    $out = Html::tag('span',$item,['class' => 'label label-info']);
                 }else{
-                    $out .= ', '.$item;
+                    $out .= ', '.Html::tag('span',$item,['class' => 'label label-info']);
                 }
             }
         }

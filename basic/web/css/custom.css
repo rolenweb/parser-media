@@ -1,5 +1,5 @@
 div.container div.block-list-subject {
-  height: 500px;
+  height: 800px;
   overflow-y: scroll;
 }
 div.container div.block-list-subject div[name="sigle-subject"]:hover {
@@ -8,21 +8,45 @@ div.container div.block-list-subject div[name="sigle-subject"]:hover {
 div.container div.block-list-subject div.active-subject {
   background-color: #ccc;
 }
+div.container div.block-list-subject div.block-list-news {
+  width: 100%;
+  padding: 1px 5px;
+  background-color: #ccc;
+}
+div.container div.pult-details-subject div.row-title {
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  margin-left: -9px;
+  margin-right: -9px;
+}
+div.container div.pult-details-subject div.row-title span.title {
+  text-transform: uppercase;
+  font-size: 18px;
+}
+div.container div.pult-details-subject div.sort-list-smi {
+  margin-left: -9px;
+  margin-right: -9px;
+  background-color: #ccc;
+  padding: 5px 10px;
+}
+div.container div.pult-details-subject div.sort-list-smi label.control-label {
+  padding-top: 0px;
+}
 div.container div.block-details-subject {
   height: 500px;
   overflow-y: scroll;
 }
-div.container div.block-details-subject div.row-title {
-  border-top: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
-  margin-left: -10px;
-  margin-right: -10px;
-}
-div.container div.block-details-subject div.row-title span.title {
-  text-transform: uppercase;
-  font-size: 18px;
-}
 div.container div.block-details-subject div.list-smi {
   margin-left: 0px;
   margin-right: 0px;
+}
+div.container div.block-details-subject div.list-smi li.title-smi {
+  margin-top: 5px;
+}
+div.container div.block-details-subject div.list-smi li.title-smi span.label {
+  font-size: 100%;
+}
+div.container div.block-details-subject div.list-smi li.title-news h4 {
+  margin-top: 5px;
+  margin-bottom: 0px;
 }

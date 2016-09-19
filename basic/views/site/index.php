@@ -3,12 +3,14 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 
 $this->title = 'Parser Media';
+$this->registerJsFile('//cdn.tinymce.com/4/tinymce.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 echo Html::beginTag('div',['class' => 'row']);
     echo Html::beginTag('div',['class' => 'col-sm-12']);
         echo Html::beginTag('div',['class' => 'table-responsive']);
             echo Html::beginTag('table',['class' => 'table table-bordered']);
                 echo Html::beginTag('col',['width' => '330', 'valign' => 'top']);
+                echo Html::beginTag('col',['width' => '500', 'valign' => 'top']);
                 echo Html::beginTag('thead');
                     echo Html::beginTag('tr');
                         echo Html::beginTag('th');
@@ -44,16 +46,18 @@ echo Html::beginTag('div',['class' => 'row']);
                                 ]);
                         echo Html::endTag('td');
                         echo Html::beginTag('td');
-                            echo Html::beginTag('div');
-
+                            echo Html::beginTag('div',['class' => 'pult-details-subject']);
+                                echo $this->render('subject/_pult_details_subject');
                             echo Html::endTag('div');
-
                             echo Html::beginTag('div',['name' => 'block-details-subject', 'class' => 'block-details-subject']);
                                 
                             echo Html::endTag('div');
                         echo Html::endTag('td');
                         echo Html::beginTag('td');
-                            echo "content here";
+                            echo Html::beginTag('div',['name' => 'block-template-news', 'class' => 'block-template-news']);
+                                echo $this->render('template-news/_block_index');
+                                
+                            echo Html::endTag('div');
                         echo Html::endTag('td');
                     echo Html::endTag('tr');
                 echo Html::endTag('tbody');
