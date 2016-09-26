@@ -1,3 +1,13 @@
+@media (min-width: 1400px) {
+  div.container {
+    width: 1390px;
+  }
+}
+@media (min-width: 1600px) {
+  div.container {
+    width: 1590px;
+  }
+}
 div.container div.block-list-subject {
   height: 800px;
   overflow-y: scroll;
