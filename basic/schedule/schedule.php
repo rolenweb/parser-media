@@ -21,7 +21,8 @@
 //$schedule->command('notice/developer')->cron('* * * * *');
 //$schedule->command('notice')->cron('* * * * *');
 //$schedule->command('contract-nonconformance')->cron('* * * * *');
+///usr/bin/php /var/www/admin/www/parser-media.devsym.ru/basic/yii schedule/run --scheduleFile=@app/schedule/schedule.php
 
 //
-$schedule->command('subject-parser')->everyThirtyMinutes();
-$schedule->command('full-text-parser')->everyFiveMinutes();
+$schedule->command('subject-parser')->everyFiveMinutes();
+//$schedule->command('full-text-parser')->everyFiveMinutes();
