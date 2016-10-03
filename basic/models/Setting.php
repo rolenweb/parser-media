@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use app\components\LogDateBehavior;
 /**
  * This is the model class for table "setting".
  *
@@ -20,6 +21,7 @@ class Setting extends \yii\db\ActiveRecord
     {
         return [
             TimestampBehavior::className(),
+            LogDateBehavior::className(),
         ];
     }
 

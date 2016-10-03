@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use app\components\LogDateBehavior;
 
 use app\models\News;
 use app\models\NewsFullText;
@@ -39,6 +40,7 @@ class Sourse extends \yii\db\ActiveRecord
     {
         return [
             TimestampBehavior::className(),
+            LogDateBehavior::className(),
         ];
     }
 

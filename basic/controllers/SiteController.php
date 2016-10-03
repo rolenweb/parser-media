@@ -20,7 +20,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout','index','login','load-details-subject'],
+                'only' => ['logout','index','login','load-details-subject','processed-subject'],
                 'rules' => [
                     [
                         'actions' => ['logout'],
@@ -33,7 +33,7 @@ class SiteController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['index','load-details-subject'],
+                        'actions' => ['index','load-details-subject','processed-subject'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
@@ -149,4 +149,50 @@ class SiteController extends Controller
             return $this->redirect(['site/index']);
         }
     }
+
+    public function actionProcessedSubject()
+    {
+        if(Yii::$app->request->isAjax){
+
+            $error = [];
+            $info = [];
+
+            $post_data = Yii::$app->request->post();
+
+            if (!isset($post_data)) {
+                $error[] = 'The post data is not set';
+                return $this->renderAjax('_result', [
+                    'error' => $error,
+                ]);
+            }
+
+            $subject = Subject::findOne($post_data['subject']);
+
+            if ($subject === null) {
+                $error[] = 'The subject is not found';
+                return $this->renderAjax('_result', [
+                    'error' => $error,
+                ]);
+            }
+
+            $subject->status = Subject::STATUS_PROCESSED;
+            if ($subject->save()) {
+                return 'ok';
+            }else{
+                foreach ($subject->getErrors() as $er) {
+                    $error[] = $er[0];
+                }
+                return $this->renderAjax('_error', [
+                    'error' => $error,
+                ]);
+            }
+            
+
+        }
+        else{
+            Yii::$app->session->setFlash('error', 'Fuck, hands off of this page.');
+            return $this->redirect(['site/index']);
+        }
+    }
+    
 }

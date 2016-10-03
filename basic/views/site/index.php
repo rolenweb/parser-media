@@ -17,7 +17,7 @@ echo Html::beginTag('div',['class' => 'row']);
                             echo Html::beginTag('ul',['class' => 'list-inline']);
                                 echo Html::beginTag('li');
                                     echo Html::beginTag('span');
-                                        echo 'РУС(3)';
+                                        echo 'РУС('.count($subjects).')';
                                     echo Html::endTag('span');
                                 echo Html::endTag('li');
                                 echo Html::beginTag('li');

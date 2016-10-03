@@ -6,13 +6,18 @@ if (empty($subjects) === false) {
 	foreach ($subjects as $subject) {
 			if (empty($subject->news) === false) {
 				echo Html::beginTag('div',['class' => 'row', 'name' => 'sigle-subject','subject' => $subject->id]);
+					echo Html::beginTag('div',['class' => 'col-sm-12','name' => 'block-display-results']);
+					echo Html::endTag('div');
 					echo Html::beginTag('div',['class' => 'col-sm-12']);
 						echo Html::tag('h4',$subject->title,['name' => 'title-silgle-subject']);
 					echo Html::endTag('div');	
 					if ($subject->firstNews != NULL) {
-						echo Html::beginTag('div',['class' => 'col-sm-12']);
-							echo Html::tag('span',date("H:i",$subject->firstNews->time),['class' => 'label label-default']);
-						echo Html::endTag('div');	
+						echo Html::beginTag('div',['class' => 'col-sm-8']);
+							echo Html::tag('span',date("d/m/y H:i",$subject->firstNews->time),['class' => 'label label-default']);
+						echo Html::endTag('div');
+						echo Html::beginTag('div',['class' => 'col-sm-4']);
+							echo Html::button('Обработан',['class' => 'btn btn-primary btn-xs', 'name' => 'processed-subject', 'subject' => $subject->id]);
+						echo Html::endTag('div');
 
 						echo Html::beginTag('div',['class' => 'col-sm-12']);
 							echo $subject->firstNews->preview;

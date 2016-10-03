@@ -5,12 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\News;
+use app\models\Log;
 
 /**
- * NewsSearch represents the model behind the search form about `app\models\News`.
+ * LogSearch represents the model behind the search form about `app\models\Log`.
  */
-class NewsSearch extends News
+class LogSearch extends Log
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class NewsSearch extends News
     public function rules()
     {
         return [
-            [['id', 'description_id', 'resourse_id', 'parse_key_id', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['title', 'preview', 'url'], 'safe'],
+            [['id', 'object_id', 'created_at', 'updated_at'], 'integer'],
+            [['object', 'type', 'data'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class NewsSearch extends News
      */
     public function search($params)
     {
-        $query = News::find()->orderBy(['updated_at' => SORT_DESC]);
+        $query = Log::find()->orderBy(['updated_at' => SORT_DESC]);
 
         // add conditions that should always apply here
 
@@ -60,17 +60,14 @@ class NewsSearch extends News
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'description_id' => $this->description_id,
-            'resourse_id' => $this->resourse_id,
-            'parse_key_id' => $this->parse_key_id,
-            'status' => $this->status,
+            'object_id' => $this->object_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['like', 'title', $this->title])
-            ->andFilterWhere(['like', 'preview', $this->preview])
-            ->andFilterWhere(['like', 'url', $this->url]);
+        $query->andFilterWhere(['like', 'object', $this->object])
+            ->andFilterWhere(['like', 'type', $this->type])
+            ->andFilterWhere(['like', 'data', $this->data]);
 
         return $dataProvider;
     }

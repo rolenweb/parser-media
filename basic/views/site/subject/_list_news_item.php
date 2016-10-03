@@ -1,7 +1,7 @@
 <?php
 use yii\helpers\Html;
 
-echo Html::beginTag('ul',['class' => 'list-unstyled']);
+echo Html::beginTag('ul',['class' => 'list-unstyled', 'name' => 'single-news']);
 					echo Html::beginTag('li',['class' => 'title-smi']);
 						if ($item->smi !== null) {
 							echo Html::tag('span',$item->smi->name,['class' => 'label label-info']);
@@ -20,6 +20,12 @@ echo Html::beginTag('ul',['class' => 'list-unstyled']);
 						if ($item->newsFullText !== null) {
 							echo $item->newsFullText->text;
 						}
+					echo Html::endTag('li');
+					echo Html::beginTag('li',['class' => 'input-to-template text-right']);
+						if ($item->newsFullText !== null) {
+							echo Html::button('Вставить',['class' => 'btn btn-primary btn-xs','name' => 'input-to-template']);
+						}
+						
 					echo Html::endTag('li');
 				echo Html::endTag('ul');
 				echo Html::beginTag('hr');

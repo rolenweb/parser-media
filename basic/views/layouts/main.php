@@ -42,6 +42,7 @@ AppAsset::register($this);
             ['label' => 'Категории', 'url' => ['/category/index'], 'visible' => Yii::$app->user->can('admin')],
             ['label' => 'Сюжеты', 'url' => ['/subject/index'], 'visible' => Yii::$app->user->can('admin')],
             ['label' => 'Список новостей', 'url' => ['/news/index'], 'visible' => Yii::$app->user->can('admin')],
+            ['label' => 'Логи', 'url' => ['/log/index'], 'visible' => Yii::$app->user->can('admin')],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (

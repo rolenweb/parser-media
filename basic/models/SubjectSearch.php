@@ -41,7 +41,7 @@ class SubjectSearch extends Subject
      */
     public function search($params)
     {
-        $query = Subject::find();
+        $query = Subject::find()->orderBy(['updated_at' => SORT_DESC]);
 
         // add conditions that should always apply here
 

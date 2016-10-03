@@ -18,7 +18,8 @@
         "yiisoft/yii2": ">=2.0.5",
         "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "*",
-        "vdb/php-spider": "^0.2.0"
+        "vdb/php-spider": "^0.2.0",
+        "omnilight/yii2-scheduling": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

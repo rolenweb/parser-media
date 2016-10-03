@@ -12,7 +12,7 @@ div.container div.block-list-subject {
   height: 800px;
   overflow-y: scroll;
 }
-div.container div.block-list-subject div[name="sigle-subject"]:hover {
+div.container div.block-list-subject div[name="sigle-subject"] h4[name="title-silgle-subject"]:hover {
   cursor: pointer;
 }
 div.container div.block-list-subject div.active-subject {

@@ -4,6 +4,8 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use app\components\LogDateBehavior;
+
 /**
  * This is the model class for table "news_full_text".
  *
@@ -27,6 +29,7 @@ class NewsFullText extends \yii\db\ActiveRecord
     {
         return [
             TimestampBehavior::className(),
+            LogDateBehavior::className(),
         ];
     }
 

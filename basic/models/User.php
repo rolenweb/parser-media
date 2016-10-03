@@ -7,6 +7,8 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
+use app\components\LogDateBehavior;
+
 /**
  * User model
  *
@@ -42,6 +44,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             TimestampBehavior::className(),
+            LogDateBehavior::className(),
         ];
     }
 
