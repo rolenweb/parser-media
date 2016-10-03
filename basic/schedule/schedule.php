@@ -25,4 +25,4 @@
 
 //
 $schedule->command('subject-parser')->everyFiveMinutes();
-//$schedule->command('full-text-parser')->everyFiveMinutes();
+$schedule->command('full-text-parser')->everyFiveMinutes();
