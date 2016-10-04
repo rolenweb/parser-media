@@ -31,7 +31,7 @@ use app\models\NewsSites;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class SubjectParserController extends Controller
+class SubjectParserController extends BaseCommand
 {
     /**
      * This command echoes what you have entered as the message.
@@ -39,26 +39,40 @@ class SubjectParserController extends Controller
      */
     public function actionIndex()
     {
-        $sourse = Sourse::findOne(['name' => 'yandex']);
-        if ($sourse === NULL) {
-            return 'Sourse not found';
-        }
 
-        if (empty($sourse->keysParse) === false) {
-            foreach ($sourse->keysParse as $key) {
-                $content = $this->gom_yt($sourse->urlParse($key));
+        for ($i=0; $i < 100000000; $i++) { 
+            $this->success("Iteration: ".$i);
+            $sourse = Sourse::findOne(['name' => 'yandex']);
+            if ($sourse === NULL) {
+                $this->error('Sourse not found');
+                return;
             }
-        }else{
-            $content = $this->gom_yt($sourse->urlParse());
+
+            if (empty($sourse->keysParse) === false) {
+                foreach ($sourse->keysParse as $key) {
+                    $parse_url = $sourse->urlParse($key);
+                    $this->success("parse url: ".$parse_url);
+                    $content = $this->gom_yt($parse_url);
+                }
+            }else{
+                $parse_url = $sourse->urlParse();
+                $this->success("parse url: ".$parse_url);
+                $content = $this->gom_yt($parse_url);
+            }
+            
+            //$content = $this->gom_yt('https://news.yandex.ru/yandsearch?text=&rpt=nnews2&grhow=clutop&catnews=51&catnews=5&catnews=49&catnews=4&catnews=636&within=7&from_day=&from_month=&from_year=&to_day=&to_month=&to_year=&numdoc=30');
+
+            $list_url_subjesct = $this->listSubject($content);
+
+            $this->parseListSubject($list_url_subjesct,$sourse);
+
+            $sourse = Sourse::find()->where(['and',['name' => 'yandex'],['status' => Sourse::STATUS_ACTIVE]])->limit(1)->one();
+            if (empty($sourse) === false) {
+                $sourse->fullTextParseYandex();
+            }
+            $this->success("Sleep: 15 мин.");    
+            sleep(1500);
         }
-        
-        //$content = $this->gom_yt('https://news.yandex.ru/yandsearch?text=&rpt=nnews2&grhow=clutop&catnews=51&catnews=5&catnews=49&catnews=4&catnews=636&within=7&from_day=&from_month=&from_year=&to_day=&to_month=&to_year=&numdoc=30');
-
-        $list_url_subjesct = $this->listSubject($content);
-
-        $this->parseListSubject($list_url_subjesct,$sourse);
-
-        
     }
 
 
@@ -66,7 +80,8 @@ class SubjectParserController extends Controller
     public function parseListSubject($in,$sourse)
     {
         if (empty($in)) {
-            return 'The array of subject is NULL';
+            $this->error('The array of subject is NULL');
+            return;
         }
         foreach ($in as $item) {
             $html = $this->gom_yt($item.'&content=alldocs');
@@ -81,8 +96,7 @@ class SubjectParserController extends Controller
                 }
                 
             }
-            var_dump("parse: ".$item);
-            
+            $this->success("parse subject: ".$item);
         }
     }
 
@@ -212,7 +226,9 @@ class SubjectParserController extends Controller
     function gom_yt($url){
         $antigate = Setting::findOne(['name' => 'antigate']);
         if ($antigate === NULL) {
-            return 'The antigate key is not set';
+            $this->error('The antigate key is not set');
+            return;
+
         }
 
         $recognize = new Recognize();
@@ -221,13 +237,12 @@ class SubjectParserController extends Controller
                               
         if (preg_match('@Location:(.*?)\n@is', $html, $loc)){
             $loc = trim($loc[1]);
-            echo '<h1>LOCATION!!</h1>';
+            $this->success('LOCATION!!');
             $html = $this->gom($loc);
         }
 
         while (strpos($html, 'action="/checkcaptcha') !== false){
-            echo 'NEED CAPTCHA!<hr>';
-
+            $this->success('NEED CAPTCHA!');
             // get img src
             preg_match('@<img class="image form__captcha" .*?src="(.*?)"@', $html, $cap_src);
             $cap_src = $cap_src[1];
@@ -244,7 +259,7 @@ class SubjectParserController extends Controller
             $cap_img = $this->gom($cap_src);
             if (preg_match('@Location:(.*?)\n@is', $cap_img, $loc)){
                 $loc = trim($loc[1]);
-                echo '<h1>LOCATION!!</h1>';
+                $this->success('LOCATION!!');
                 $cap_img = $this->gom($loc);
             }
 
@@ -255,8 +270,10 @@ class SubjectParserController extends Controller
             if ($cap_txt === false) {
                     # code...
             }else{
-                echo "<img src='1.gif' /> <hr> \n $key <hr> \n $cap_txt <hr> \n $retpath <hr> \n";
-
+                //echo "<img src='1.gif' /> <hr> \n $key <hr> \n $cap_txt <hr> \n $retpath <hr> \n";
+                $this->success('key: '.$key);
+                $this->success('CAPTCHA: '.$cap_txt);
+                $this->success('retpath: '.$retpath);
                 // send form 
                 $html = $this->gom('https://news.yandex.ru/checkcaptcha?key='.urlencode($key).'&retpath='.urlencode($retpath).'&rep='.urlencode($cap_txt));    
             }
@@ -270,7 +287,8 @@ class SubjectParserController extends Controller
         
         $useragent_model = Setting::findOne(['name' => 'useragent']);
         if ($useragent_model === NULL) {
-            return 'The useragent is not set';
+            $this->error('The useragent is not set');
+            return;
         }
         $user_agent = $useragent_model->value;
         

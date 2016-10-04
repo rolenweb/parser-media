@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\Console;
 use yii\behaviors\TimestampBehavior;
 use app\components\LogDateBehavior;
 
@@ -213,7 +214,7 @@ class Sourse extends \yii\db\ActiveRecord
 
         $parser = new NewsParser();
         foreach ($news as $item) {
-            var_dump($item->url);
+            $this->success('Parse full text: '.$item->url);
             if ($item->url !== null) {
                 $content = $parser->parsePage($item->url);
                 if ($content !== null) {
@@ -294,5 +295,15 @@ class Sourse extends \yii\db\ActiveRecord
                                     'like','news.url','bfm.ru',
                                 ]
         ];
+    }
+
+    protected static function success($message)
+    {
+        Console::output(Console::ansiFormat($message, [Console::FG_GREEN]));
+    }
+
+    protected static function error($message)
+    {
+        Console::output(Console::ansiFormat($message, [Console::FG_RED]));
     }
 }
