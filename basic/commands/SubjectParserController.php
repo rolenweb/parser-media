@@ -71,7 +71,7 @@ class SubjectParserController extends BaseCommand
                 $sourse->fullTextParseYandex();
             }
             $this->success("Sleep: 15 мин.");    
-            sleep(1500);
+            sleep(900);
         }
     }
 

@@ -18,6 +18,7 @@ Thumbs.db
 /config/params.php
 /cookiefile
 /recognize
+/nohup
 nohup.out
 
 # composer itself is not needed
