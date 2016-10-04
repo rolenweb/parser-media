@@ -169,6 +169,9 @@ class SubjectParserController extends BaseCommand
 
     public function saveNews($data,$subject)
     {
+        if (empty($subject) !== false) {
+            return;
+        }
         foreach ($data['title'] as $key => $title) {
             if (isset($data['links'][$key])) {
                 if (News::findOne(['url' => $data['links'][$key]]) === NULL) {
@@ -197,7 +200,6 @@ class SubjectParserController extends BaseCommand
                 }
             }    
         }
-        
     }
 
     public function saveLinkCategory($arr,$subject)
