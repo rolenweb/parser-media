@@ -166,7 +166,7 @@ class Subject extends \yii\db\ActiveRecord
 
             if (empty(trim($text)) === false) {
                 $words = $this->deleleElementFromArray(explode(' ',$text),3);
-                var_dump($words);
+                var_dump($text);
                 die;
                 $exact_match = $this->filerN($this->count_combinations($words, 3),2);
                 var_dump($exact_match);
