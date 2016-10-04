@@ -161,6 +161,8 @@ class Subject extends \yii\db\ActiveRecord
                     
                 }
             }
+            var_dump($text);
+            die;
             if (empty(trim($text)) === false) {
                 $exact_match = $this->filerN($this->count_combinations($this->deleleElementFromArray(explode(' ',$text),3), 3),2);
                 if (empty($exact_match) !== false) {
