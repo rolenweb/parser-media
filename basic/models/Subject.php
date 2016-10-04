@@ -140,6 +140,8 @@ class Subject extends \yii\db\ActiveRecord
         $tmp = array(); // массив счетчиков различных комбинаций
         $n = sizeof($words) - $chain_length + 1; // количество итераций цикла while
         $i = 0;
+        var_dump($words);
+        die;
         while ($i < $n) {
             $index = implode($delimiter, array_slice($words, $i, $chain_length)); // текущая цепочка слов длиной $chain_length
             if (!isset($tmp[$index])) $tmp[$index] = 1; // комбинация встретилась впервые
