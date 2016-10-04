@@ -166,9 +166,9 @@ class Subject extends \yii\db\ActiveRecord
 
             if (empty(trim($text)) === false) {
                 $text = iconv("utf-8", "windows-1251", $text);
-                $words = $this->deleleElementFromArray(explode(' ',$text),3);
-                var_dump(mb_detect_encoding( $text));
-                die;
+                $words = ['тест','тест'];//$this->deleleElementFromArray(explode(' ',$text),3);
+                //var_dump(mb_detect_encoding($text));
+                //die;
                 $exact_match = $this->filerN($this->count_combinations($words, 3),2);
                 var_dump($exact_match);
         die;
