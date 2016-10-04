@@ -42,9 +42,21 @@ div.container div.pult-details-subject div.sort-list-smi {
 div.container div.pult-details-subject div.sort-list-smi label.control-label {
   padding-top: 0px;
 }
+div.container div.pult-details-subject div.sort-list-smi label[for="keyword"] {
+  cursor: pointer;
+}
 div.container div.block-details-subject {
   height: 500px;
   overflow-y: scroll;
+}
+div.container div.block-details-subject div.keywords-stats {
+  display: none;
+}
+div.container div.block-details-subject div.keywords-stats ul {
+  border-bottom: 1px solid #ccc;
+}
+div.container div.block-details-subject div.keywords-stats ul li span.badge {
+  margin-left: 10px;
 }
 div.container div.block-details-subject div.list-smi {
   margin-left: 0px;

@@ -71,7 +71,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $subjects = Subject::find()->where(['status' => Subject::STATUS_SPIDER])->orderBy(['created_at' => SORT_DESC])->all();
+        $subjects = Subject::find()->where(['status' => Subject::STATUS_SPIDER])->orderBy(['created_at' => SORT_DESC])->limit(50)->all();
         return $this->render('index',[
             'subjects' => $subjects,
             ]);
@@ -138,8 +138,10 @@ class SiteController extends Controller
                 ]);
             }
 
+
             return $this->renderAjax('subject/_single_details', [
                     'subject' => $subject,
+                    'keywords_stats' => $subject->phraseStats(),
             ]);
             
 

@@ -126,4 +126,128 @@ class Subject extends \yii\db\ActiveRecord
         }
         return $out;
     }
+
+    /**
+    Функция count_combinations(). Автор: valyala (valyala@tut.by)
+    Подсчитывает количество повторений цепочек слов в массиве.
+    Параметры:
+        $words - массив подряд идущих слов, для которых нужно подсчитать количество повторений
+        $chain_length - длина цепочки, для которой ведется подсчет
+    Возвращает ассоциативный массив вида [ комбинация => счетчик ]
+    */
+    public function count_combinations($words, $chain_length) {
+        $delimiter = ' '; // разделитель слов, использующийся в индексе
+        $tmp = array(); // массив счетчиков различных комбинаций
+        $n = sizeof($words) - $chain_length + 1; // количество итераций цикла while
+        $i = 0;
+        while ($i < $n) {
+            $index = implode($delimiter, array_slice($words, $i, $chain_length)); // текущая цепочка слов длиной $chain_length
+            if (!isset($tmp[$index])) $tmp[$index] = 1; // комбинация встретилась впервые
+            else $tmp[$index]++; // комбинация уже встречалась
+            $i++;
+        }
+        return $tmp;
+    }
+
+    public function phraseStats()
+    {
+        $out = [];
+        $text = '';
+        $list_news = $this->news;    
+        if (empty($list_news) === false) {
+            foreach ($list_news as $news) {
+                if (empty($news->newsFullText) === false) {
+                    $text .= ' '.str_replace($this->black(), '',  strip_tags($news->newsFullText->text));
+                    
+                }
+            }
+            if (empty(trim($text)) === false) {
+                $exact_match = $this->filerN($this->count_combinations($this->deleleElementFromArray(explode(' ',$text),3), 3),2);
+                if (empty($exact_match) !== false) {
+                    $exact_match = $this->filerN($this->count_combinations($this->deleleElementFromArray(explode(' ',$text),3), 2),2);
+                }
+                arsort($exact_match);
+                $out['exact_match'] = $exact_match;
+            }
+        }
+        return $out;
+    }
+
+    public function deleleElementFromArray($in,$length)
+    {
+        $out = [];
+        if (empty($in) === false) {
+            foreach ($in as $item) {
+                if (strlen($item) > $length && in_array($item,$this->stopWords()) === false) {
+                    $out[] = mb_strtolower($item);
+                }
+            }
+        }
+        
+        return $out;
+    }
+
+    public function filerN($arr,$n = 2)
+    {
+        $out = [];
+        if (empty($arr) === false) {
+            foreach ($arr as $key => $value) {
+                if ($value >= $n) {
+                    $out[$key] = $value;
+                }
+            }
+        }
+        return $out;
+    }
+
+    public function black()
+    {
+        return [
+            '\r\n',
+            '\r',
+            '\n',
+            '.',
+            ',',
+            '?',
+            '!',
+            "\"",
+            '(',
+            ')',
+            '/',
+            '/',
+            ':',
+            ';',
+            '[',
+            ']',
+            '«',
+            '»',
+        ];
+    }
+    public function stopWords()
+    {
+        return [
+            
+            'кроме',
+            'того',
+            'из',
+            'об',
+            'этом',
+            'уже',
+            'пока',
+            'что',
+            'такая',
+            'по',
+            'для',
+            'или',
+            'от',
+            'по',
+            'чтобы',
+            'мы',
+            'как',
+            'его',
+            'во',
+            'всех',
+
+        ];
+    }
 }

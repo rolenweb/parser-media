@@ -8,6 +8,7 @@ $(function() {
 		titleSubjectTemplate(sigle_subject)
 		loadDetailsSubject(sigle_subject);
 		numberSubjectReplace(sigle_subject);
+		
 		tinyMCE.activeEditor.setContent('<p></p>');
 	});
 
@@ -45,11 +46,27 @@ $(function() {
             }
         ).done(function( data ) {
             	block_reload.html(data);
+            	setKeywordsInput();
         	}
         ).fail( function(xhr, textStatus, errorThrown) {
             	alert(xhr.responseText);
         	}
         );
+	}
+
+	function setKeywordsInput(){
+		var list_li = home.find('div.keywords-stats li span.keywords-stats');
+		var keys;
+		for (var i = 0; i < list_li.length; i++) {
+			if (i < 3) {
+				if (i === 0) {
+					keys = $(list_li[i]).text();	
+				}else{
+					keys = keys+', '+$(list_li[i]).text();
+				}	
+			}
+		}
+		home.find('div.pult-details-subject input[name = "keyword"]').val(keys);
 	}
 
 	tinymce.init(
@@ -93,8 +110,9 @@ $(function() {
 		var old_content = tinyMCE.activeEditor.getContent();
 		console.log(old_content);
 		tinyMCE.activeEditor.setContent(old_content+'<hr><p>'+text.text()+'</p>');
+	});
 
-		
-		
+	home.on('click', 'div.sort-list-smi label[for = "keyword"]',function( event ) {	
+    	home.find('div.keywords-stats').toggle();
 	});
 });

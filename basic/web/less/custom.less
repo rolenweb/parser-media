@@ -49,12 +49,25 @@ div.container{
 			label.control-label{
 				padding-top: 0px;
 			}
+			label[for = "keyword"]{
+				cursor: pointer;
+			}
 		}
 	}
 	div.block-details-subject{
 		height: 500px;
 		overflow-y: scroll;
-		
+		div.keywords-stats{
+			display: none;
+			ul{
+				border-bottom: 1px solid @border-color;
+				li{
+					span.badge{
+						margin-left: 10px;
+					}
+				}
+			}
+		}
 		
 		div.list-smi{
 			margin-left: 0px;
