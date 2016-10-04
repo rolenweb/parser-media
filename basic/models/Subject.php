@@ -189,9 +189,9 @@ class Subject extends \yii\db\ActiveRecord
         if (empty($in) === false) {
             foreach ($in as $item) {
                 if (strlen($item) > $length && in_array($item,$this->stopWords()) === false) {
-                    var_dump($item);
-                    die;
                     $out[] = mb_strtolower($item);
+                    var_dump($out);
+                    die;
                 }
             }
         }
