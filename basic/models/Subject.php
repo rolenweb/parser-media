@@ -165,8 +165,8 @@ class Subject extends \yii\db\ActiveRecord
             }
 
             if (empty(trim($text)) === false) {
-                $text = iconv("utf-8", "windows-1251", $text);
-                $words = ['тест','тест'];//$this->deleleElementFromArray(explode(' ',$text),3);
+                //$text = iconv("utf-8", "windows-1251", $text);
+                $words = $this->deleleElementFromArray(explode(' ',$text),3);
                 //var_dump(mb_detect_encoding($text));
                 //die;
                 $exact_match = $this->filerN($this->count_combinations($words, 3),2);
@@ -189,6 +189,8 @@ class Subject extends \yii\db\ActiveRecord
         if (empty($in) === false) {
             foreach ($in as $item) {
                 if (strlen($item) > $length && in_array($item,$this->stopWords()) === false) {
+                    var_dump($item);
+                    die;
                     $out[] = mb_strtolower($item);
                 }
             }
