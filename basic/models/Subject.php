@@ -140,8 +140,6 @@ class Subject extends \yii\db\ActiveRecord
         $tmp = array(); // массив счетчиков различных комбинаций
         $n = sizeof($words) - $chain_length + 1; // количество итераций цикла while
         $i = 0;
-        var_dump($words);
-        die;
         while ($i < $n) {
             $index = implode($delimiter, array_slice($words, $i, $chain_length)); // текущая цепочка слов длиной $chain_length
             if (!isset($tmp[$index])) $tmp[$index] = 1; // комбинация встретилась впервые
@@ -170,8 +168,7 @@ class Subject extends \yii\db\ActiveRecord
                 //var_dump(mb_detect_encoding($text));
                 //die;
                 $exact_match = $this->filerN($this->count_combinations($words, 3),2);
-                var_dump($exact_match);
-        die;
+                
                 if (empty($exact_match) !== false) {
                     $exact_match = $this->filerN($this->count_combinations($this->deleleElementFromArray(explode(' ',$text),3), 2),2);
                 }
@@ -190,8 +187,6 @@ class Subject extends \yii\db\ActiveRecord
             foreach ($in as $item) {
                 if (strlen($item) > $length && in_array($item,$this->stopWords()) === false) {
                     $out[] = mb_strtolower($item,'UTF-8');
-                    var_dump($out);
-                    die;
                 }
             }
         }
