@@ -165,7 +165,7 @@ class Subject extends \yii\db\ActiveRecord
             }
 
             if (empty(trim($text)) === false) {
-                $text = iconv("windows-1251", "utf-8", $text);
+                $text = iconv("utf-8", "windows-1251", $text);
                 $words = $this->deleleElementFromArray(explode(' ',$text),3);
                 var_dump(mb_detect_encoding( $text));
                 die;
