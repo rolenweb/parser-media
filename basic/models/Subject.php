@@ -189,7 +189,7 @@ class Subject extends \yii\db\ActiveRecord
         if (empty($in) === false) {
             foreach ($in as $item) {
                 if (strlen($item) > $length && in_array($item,$this->stopWords()) === false) {
-                    $out[] = mb_strtolower($item);
+                    $out[] = mb_strtolower($item,'UTF-8');
                     var_dump($out);
                     die;
                 }
