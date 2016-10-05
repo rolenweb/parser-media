@@ -122,4 +122,6 @@ $(function() {
 	home.on('click', 'div.sort-list-smi label[for = "keyword"]',function( event ) {	
     	home.find('div.keywords-stats').toggle();
 	});
+
+	
 });

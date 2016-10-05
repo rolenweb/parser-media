@@ -2,6 +2,8 @@
 namespace app\commands\tools;
 
 use app\commands\tools\ClientInterface;
+use app\commands\tools\SymfonyParser;
+use Symfony\Component\DomCrawler\Link;
 use yii\base\InvalidConfigException;
 
 class CurlClient implements ClientInterface
@@ -82,6 +84,48 @@ class CurlClient implements ClientInterface
 		curl_setopt($this->curl, CURLOPT_HTTPHEADER, ['Expect:']);
 		curl_setopt($this->curl, CURLOPT_TIMEOUT, $this->timeout);
 		curl_setopt($this->curl, CURLOPT_FOLLOWLOCATION, true); // Follow redirects
+	}
+
+	public function parsePage($url)
+	{	
+		$content = $this->setUrl($url)->getContentWithInfo();
+		if (empty($content['info']['http_code']) === false) {
+			if ($content['info']['http_code'] === 200) {
+				if (empty($content['result']) === false) {
+					return $content['result'];
+				}
+			}
+		}
+		return;
+	}
+
+	public function parseProperty($content,$type,$pattern,$url = null)
+	{
+		$parser = (new SymfonyParser)->in($content, $this->getContentType());
+		$result = [];
+		if ($type === 'link') {
+			$nodes = $parser->find($pattern);
+			if (empty($nodes) === false) {
+				foreach ($nodes as $node) {
+					$link = new Link($node, $url, 'GET');
+					$result[] = $link->getUri();
+				}		
+			}
+		}
+		if ($type === 'string') {
+			$nodes = $parser->find($pattern);
+
+			if (empty($nodes) === false) {
+				foreach ($nodes as $node) {
+					$result[] = $node->textContent;
+				}
+			}
+		}
+
+		if ($type === 'src') {
+			$result = $parser->findSrc($pattern);
+		}
+		return $result;
 	}
 
 	public function __destruct()

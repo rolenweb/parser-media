@@ -9,6 +9,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use app\commands\tools\CurlClient;
+
 
 /**
  * CssSelectorController implements the CRUD actions for CssSelector model.
@@ -138,6 +140,88 @@ class CssSelectorController extends Controller
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    
+    public function actionTestCssSelector()
+    {
+        if(Yii::$app->request->isAjax){
+
+            $error = [];
+            $info = [];
+
+            $post_data = Yii::$app->request->post();
+
+            if (!isset($post_data)) {
+                $error[] = 'The post data is not set';
+                return $this->renderAjax('../site/_result', [
+                    'error' => $error,
+                ]);
+            }
+
+            if (!isset($post_data['selector'])) {
+                $error[] = 'The css selector is not set';
+                return $this->renderAjax('../site/_result', [
+                    'error' => $error,
+                ]);
+            }
+
+            $selector = CssSelector::findOne($post_data['selector']);
+
+            if ($selector === null) {
+                $error[] = 'The selector is not found';
+                return $this->renderAjax('../site/_result', [
+                    'error' => $error,
+                ]);
+            }
+
+            $sourse = $selector->sourse;
+            if ($sourse  !== null) {
+                if ($sourse->url === null) {
+                    $error[] = 'The sourse url is not found';
+                    return $this->renderAjax('../site/_result', [
+                        'error' => $error,
+                    ]);
+                }else{
+                    $parse_url = $sourse->url;         
+                }    
+            }
+            $news = $selector->newsSite;
+            
+            if ($news  !== null) {
+                if (empty($post_data['testurl'])) {
+                    $error[] = 'The test url is not set';
+                    return $this->renderAjax('../site/_result', [
+                        'error' => $error,
+                    ]);
+                }
+
+                $parse_url = trim($post_data['testurl']);
+            }
+
+            if ($selector->type === null || $selector->name === null || $selector->selector === null) {
+                $error[] = 'The type or name or selector is not set';
+                return $this->renderAjax('../site/_result', [
+                    'error' => $error,
+                ]);
+            }
+            
+            $client = new CurlClient();
+
+            $content = $client->parsePage($parse_url);
+
+            $property = $client->parseProperty($content,$selector->type,$selector->selector);
+
+            return $this->renderAjax('_result_test', [
+                    'property' => $property
+            ]);
+            
+
+        }
+        else{
+            Yii::$app->session->setFlash('error', 'Fuck, hands off of this page.');
+            return $this->redirect(['site/index']);
         }
     }
 }

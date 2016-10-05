@@ -43,7 +43,7 @@ class NewsSites extends \yii\db\ActiveRecord
     {
         return [
             [['federal', 'region', 'rubric', 'type', 'CY', 'region2', 'comment'], 'integer'],
-            [['region2', 'site', 'alexa_gk'], 'required'],
+            [['region2', 'site', 'alexa_gk','federal'], 'required'],
             [['name', 'url', 'email', 'adres', 'telephone', 'manager', 'MLG', 'uri', 'site', 'alexa_gk'], 'string', 'max' => 255],
         ];
     }
