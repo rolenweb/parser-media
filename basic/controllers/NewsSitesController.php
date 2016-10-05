@@ -3,18 +3,19 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Sourse;
-use app\models\SourseSearch;
-use yii\filters\AccessControl;
+use app\models\NewsSites;
+use app\models\NewsSitesSearch;
+use app\models\CssSelectorSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use yii\data\ActiveDataProvider;
+use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
- * SourseController implements the CRUD actions for Sourse model.
+ * NewsSitesController implements the CRUD actions for NewsSites model.
  */
-class SourseController extends Controller
+class NewsSitesController extends Controller
 {
     /**
      * @inheritdoc
@@ -48,12 +49,12 @@ class SourseController extends Controller
     }
 
     /**
-     * Lists all Sourse models.
+     * Lists all NewsSites models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new SourseSearch();
+        $searchModel = new NewsSitesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -63,7 +64,7 @@ class SourseController extends Controller
     }
 
     /**
-     * Displays a single Sourse model.
+     * Displays a single NewsSites model.
      * @param integer $id
      * @return mixed
      */
@@ -81,13 +82,13 @@ class SourseController extends Controller
     }
 
     /**
-     * Creates a new Sourse model.
+     * Creates a new NewsSites model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Sourse();
+        $model = new NewsSites();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -99,7 +100,7 @@ class SourseController extends Controller
     }
 
     /**
-     * Updates an existing Sourse model.
+     * Updates an existing NewsSites model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -118,7 +119,7 @@ class SourseController extends Controller
     }
 
     /**
-     * Deletes an existing Sourse model.
+     * Deletes an existing NewsSites model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -131,15 +132,15 @@ class SourseController extends Controller
     }
 
     /**
-     * Finds the Sourse model based on its primary key value.
+     * Finds the NewsSites model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Sourse the loaded model
+     * @return NewsSites the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Sourse::findOne($id)) !== null) {
+        if (($model = NewsSites::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

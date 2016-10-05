@@ -74,4 +74,9 @@ class NewsSites extends \yii\db\ActiveRecord
             'comment' => 'Comment',
         ];
     }
+
+    public function getCssSeletors()
+    {
+        return $this->hasMany(CssSelector::className(), ['news_id' => 'id']);
+    }
 }

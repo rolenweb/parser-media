@@ -1,5 +1,6 @@
 $(function() {
 	var home = $('.wrap');
+	initTinymce();
 
 	home.on('click', 'div.block-list-subject div[name = "sigle-subject"] h4[name = "title-silgle-subject"]',function( event ) {	
 		var sigle_subject = $(this).parents('div[name = "sigle-subject"]');
@@ -69,12 +70,18 @@ $(function() {
 		home.find('div.pult-details-subject input[name = "keyword"]').val(keys);
 	}
 
-	tinymce.init(
-    	{ 
-        	selector:'div[name = "block-template-news"] [name = "text"]',
-        	height : 300
-    	}
-    );
+	function initTinymce() {
+		if (home.find('div[name = "block-template-news"] [name = "text"]').length !== 0) {
+			tinymce.init(
+		    	{ 
+		        	selector:'div[name = "block-template-news"] [name = "text"]',
+		        	height : 300
+		    	}
+		    );		
+		}
+	}
+
+	
 
     home.on('click', 'div[name = "sigle-subject"] button[name = "processed-subject"]',function( event ) {	
     	

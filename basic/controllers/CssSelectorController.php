@@ -3,18 +3,17 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Sourse;
-use app\models\SourseSearch;
-use yii\filters\AccessControl;
+use app\models\CssSelector;
+use app\models\CssSelectorSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\data\ActiveDataProvider;
+use yii\filters\AccessControl;
 
 /**
- * SourseController implements the CRUD actions for Sourse model.
+ * CssSelectorController implements the CRUD actions for CssSelector model.
  */
-class SourseController extends Controller
+class CssSelectorController extends Controller
 {
     /**
      * @inheritdoc
@@ -48,12 +47,12 @@ class SourseController extends Controller
     }
 
     /**
-     * Lists all Sourse models.
+     * Lists all CssSelector models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new SourseSearch();
+        $searchModel = new CssSelectorSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -63,43 +62,39 @@ class SourseController extends Controller
     }
 
     /**
-     * Displays a single Sourse model.
+     * Displays a single CssSelector model.
      * @param integer $id
      * @return mixed
      */
     public function actionView($id)
     {
-        $model = $this->findModel($id);
-        $dataProvider = new ActiveDataProvider([
-            'query' => $model->getCssSeletors(),
-        ]);
-
         return $this->render('view', [
-            'model' => $model,
-            'dataProvider' => $dataProvider,
+            'model' => $this->findModel($id),
         ]);
     }
 
     /**
-     * Creates a new Sourse model.
+     * Creates a new CssSelector model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($sourse = null,$news = null)
     {
-        $model = new Sourse();
+        $model = new CssSelector();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'sourse' => $sourse,
+                'news' => $news,
             ]);
         }
     }
 
     /**
-     * Updates an existing Sourse model.
+     * Updates an existing CssSelector model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -118,7 +113,7 @@ class SourseController extends Controller
     }
 
     /**
-     * Deletes an existing Sourse model.
+     * Deletes an existing CssSelector model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -131,15 +126,15 @@ class SourseController extends Controller
     }
 
     /**
-     * Finds the Sourse model based on its primary key value.
+     * Finds the CssSelector model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Sourse the loaded model
+     * @return CssSelector the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Sourse::findOne($id)) !== null) {
+        if (($model = CssSelector::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

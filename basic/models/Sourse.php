@@ -306,4 +306,9 @@ class Sourse extends \yii\db\ActiveRecord
     {
         Console::output(Console::ansiFormat($message, [Console::FG_RED]));
     }
+
+    public function getCssSeletors()
+    {
+        return $this->hasMany(CssSelector::className(), ['sourse_id' => 'id']);
+    }
 }
