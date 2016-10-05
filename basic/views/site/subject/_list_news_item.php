@@ -18,7 +18,9 @@ echo Html::beginTag('ul',['class' => 'list-unstyled', 'name' => 'single-news']);
 					echo Html::endTag('li');
 					echo Html::beginTag('li',['class' => 'full-text-news']);
 						if ($item->newsFullText !== null) {
-							echo $item->newsFullText->text;
+							echo $item->markingText;
+							//echo '----------------';
+							//echo $item->newsFullText->text;
 						}
 					echo Html::endTag('li');
 					echo Html::beginTag('li',['class' => 'input-to-template text-right']);

@@ -3,8 +3,11 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\Html;
 use yii\behaviors\TimestampBehavior;
 use app\components\LogDateBehavior;
+
+use app\models\Subject;
 /**
  * This is the model class for table "news".
  *
@@ -119,6 +122,62 @@ class News extends \yii\db\ActiveRecord
         return $this->hasOne(Subject::className(), ['id' => 'subject_id']);
     }
 
+    public function GetMarkingText()
+    {
+        if ($this->newsFullText === null) {
+            return;
+        }
+        $content = $this->newsFullText->text;
+        preg_match_all('~"(.*?)"~',$content,$matchs,PREG_SET_ORDER); 
+        if (empty($matchs) === false) {
+            $quotes = [];
+            foreach ($matchs as $match) {
+                if (empty($match[0]) === false) {
+                    $quotes[] = $match[0];
+                    
+                }
+            }
+            if (empty($quotes) === false) {
+                foreach (array_unique($quotes) as $quote) {
+                    $content = str_replace($quote,Html::tag('span',$quote,['class' => 'quotes-in-text']),$content);
+                }
+            }
+        }
 
+        $words = explode(' ',$this->clearText);
+        if (empty($words) === false) {
+            $upwords = [];
+            foreach ($words as $word) {
+                if (mb_strtoupper($word,'UTF-8') === $word && strlen(trim($word)) > 2 && ctype_digit($word) === false) {
+                    $upwords[] = $word;
+                }
+            }
+            foreach (array_unique($upwords) as $upword) {
+                $content = str_replace($upword,Html::tag('span',$upword,['class' => 'abbreviation-in-text']),$content);
+            }
+
+        }
+
+        $words = explode(' ',$this->clearText);
+        if (empty($words) === false) {
+            $numbers = [];
+            foreach ($words as $word) {
+                if (is_numeric($word)) {
+                    $numbers[] = $word;
+                }
+            }
+            foreach (array_unique($numbers) as $number) {
+                $content = str_replace($number,Html::tag('span',$number,['class' => 'number-in-text']),$content);
+            }
+
+        }
+
+        return $content;
+    }
+
+    public function GetClearText()
+    {
+        return str_replace((new Subject())->black(), '',  strip_tags($this->newsFullText->text));
+    }  
      
 }

@@ -137,7 +137,7 @@ class SiteController extends Controller
                     'error' => $error,
                 ]);
             }
-
+            
 
             return $this->renderAjax('subject/_single_details', [
                     'subject' => $subject,

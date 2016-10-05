@@ -72,3 +72,14 @@ div.container div.block-details-subject div.list-smi li.title-news h4 {
   margin-top: 5px;
   margin-bottom: 0px;
 }
+div.container div.block-details-subject div.list-smi li.full-text-news span.quotes-in-text {
+  background-color: yellow;
+}
+div.container div.block-details-subject div.list-smi li.full-text-news span.abbreviation-in-text {
+  color: white;
+  background-color: green;
+}
+div.container div.block-details-subject div.list-smi li.full-text-news span.number-in-text {
+  color: white;
+  background-color: red;
+}

@@ -1,5 +1,9 @@
 @active-color: #ccc;
 @border-color: #ccc;
+@quotes-color: yellow;
+@abbreviation-color: green;
+@number-color: red;
+@white-text: white;
 
 div.container{
 	@media (min-width: 1400px){
@@ -83,6 +87,19 @@ div.container{
 				h4{
 					margin-top: 5px;
 					margin-bottom: 0px;
+				}
+			}
+			li.full-text-news{
+				span.quotes-in-text{
+					background-color: @quotes-color;
+				}
+				span.abbreviation-in-text{
+					color: @white-text;
+					background-color: @abbreviation-color;	
+				}
+				span.number-in-text{
+					color: @white-text;
+					background-color: @number-color;		
 				}
 			}
 			

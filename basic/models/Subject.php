@@ -179,6 +179,21 @@ class Subject extends \yii\db\ActiveRecord
 
         return $out;
     }
+    
+    public function glueText()
+    {
+        $text = '';
+        $list_news = $this->news;    
+        if (empty($list_news) === false) {
+            foreach ($list_news as $news) {
+                if (empty($news->newsFullText) === false) {
+                    $text .= ' '.str_replace($this->black(), '',  strip_tags($news->newsFullText->text));
+                    
+                }
+            }
+        }
+        return $text;
+    }    
 
     public function deleleElementFromArray($in,$length)
     {
@@ -228,6 +243,7 @@ class Subject extends \yii\db\ActiveRecord
             ']',
             '«',
             '»',
+            '$'
         ];
     }
     public function stopWords()
@@ -256,5 +272,54 @@ class Subject extends \yii\db\ActiveRecord
             'всех',
 
         ];
+    }
+
+    public function getNames()
+    {
+        $out = [];
+        $text = $this->glueText();
+        if (empty($text)) {
+            return $out;
+        }
+        $words = explode(' ',$text);
+
+        $words_3 = $this->count_combinations($words, 3);
+        $words_2 = $this->count_combinations($words, 2);
+        if (empty($words_3) === false) {
+            foreach ($words_3 as $key => $value) {
+                $words_key = explode(' ',$key);
+                if (empty($words_key) === false) {
+                    $name_flag = true;
+                    foreach ($words_key as $single) {
+                        if (mb_strtoupper($single,'UTF-8') === $single) {
+                            $name_flag = false;
+                        }
+                        if (mb_strtolower($single,'UTF-8') === $single) {
+                            $name_flag = false;
+                        }
+                        
+                    }
+                    
+                    if ($name_flag) {
+                        var_dump($words_key);
+                        $out[] = $key;
+                    }
+                }
+                
+            }
+        }
+        /*if (empty($words_2) === false) {
+            foreach ($words_2 as $key => $value) {
+                $words_key = explode(' ',$key);
+                if (empty($words_key) === false) {
+                    foreach ($words_key as $single) {
+                        if (ctype_lower($single) === false  && ctype_upper($single) === false) {
+                            $out[] = $key;
+                        }        
+                    }
+                }
+            }
+        }*/
+        return $out;
     }
 }
