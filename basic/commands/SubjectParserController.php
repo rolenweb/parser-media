@@ -62,9 +62,9 @@ class SubjectParserController extends BaseCommand
             
             //$content = $this->gom_yt('https://news.yandex.ru/yandsearch?text=&rpt=nnews2&grhow=clutop&catnews=51&catnews=5&catnews=49&catnews=4&catnews=636&within=7&from_day=&from_month=&from_year=&to_day=&to_month=&to_year=&numdoc=30');
 
-            $list_url_subjesct = $this->listSubject($content);
+            $list_subjesct = $this->listSubject($content);
 
-            $this->parseListSubject($list_url_subjesct,$sourse);
+            $this->parseListSubject($list_subjesct,$sourse);
 
             $sourse = Sourse::find()->where(['and',['name' => 'yandex'],['status' => Sourse::STATUS_ACTIVE]])->limit(1)->one();
             if (empty($sourse) === false) {
@@ -79,17 +79,21 @@ class SubjectParserController extends BaseCommand
 
     public function parseListSubject($in,$sourse)
     {
-        if (empty($in)) {
+        if (empty($in['link'])) {
             $this->error('The array of subject is NULL');
             return;
         }
-        foreach ($in as $item) {
+        if (empty($in['title'])) {
+            $this->error('The array of subject is NULL');
+            return;
+        }
+        foreach ($in['link'] as $n => $item) {
             $html = $this->gom_yt($item.'&content=alldocs');
             $subject = $this->parseSingleSubject($html);
             
             if (empty($subject) === false) {
-                if (isset($subject['subject_title'])) {
-                    $saved_subject = $this->saveSubject($subject['subject_title'][0],$item,$sourse);
+                if (isset($in['title'][$n])) {
+                    $saved_subject = $this->saveSubject($in['title'][$n],$item,$sourse);
                 }
                 if (isset($subject['links']) && isset($subject['description']) && isset($subject['title'])) {
                     $this->saveNews($subject,$saved_subject);
@@ -110,7 +114,10 @@ class SubjectParserController extends BaseCommand
         
         foreach ($content as $node) {
             $link = new Link($node, 'https://news.yandex.ru', 'GET');
-            $result[] = $link->getUri();
+            $result['link'][] = $link->getUri();
+        }
+        foreach ($content as $node) {
+            $result['title'][] = $node->textContent;
         }
         return $result;
     }
