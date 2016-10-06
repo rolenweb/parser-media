@@ -1,6 +1,8 @@
 <?php
 
 use yii\helpers\Html;
+$this->registerCssFile('@web/css/css-selector.css', ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
+
 $this->registerJsFile('@web/js/css-selector.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 
 /* @var $this yii\web\View */
