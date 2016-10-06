@@ -87,9 +87,12 @@ class Log extends \yii\db\ActiveRecord
             return;
         }else{
             $arr = json_decode($this->data);
-            foreach ($arr as $key => $item) {
-                $out .= '<div><b>'.$key.':</b> from: '.$item->from.' to: '.$item->to.'</div>';
+            if (empty($arr) === false) {
+                foreach ($arr as $key => $item) {
+                    $out .= '<div><b>'.$key.':</b> from: '.$item->from.' to: '.$item->to.'</div>';
+                }
             }
+            
         }
         return $out;
     }
