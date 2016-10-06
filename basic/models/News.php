@@ -178,6 +178,11 @@ class News extends \yii\db\ActiveRecord
     public function GetClearText()
     {
         return str_replace((new Subject())->black(), '',  strip_tags($this->newsFullText->text));
-    }  
+    } 
+
+    public function getProperties()
+    {
+        return $this->hasMany(NewsProperty::className(), ['news_id' => 'id']);
+    } 
      
 }

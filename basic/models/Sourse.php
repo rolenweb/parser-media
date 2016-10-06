@@ -9,8 +9,11 @@ use app\components\LogDateBehavior;
 
 use app\models\News;
 use app\models\NewsFullText;
+use app\models\CssSelector;
+use app\models\NewsProperty;
 
 use app\commands\tools\NewsParser;
+use app\commands\tools\CurlClient;
 /**
  * This is the model class for table "sourse".
  *
@@ -123,6 +126,12 @@ class Sourse extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Category::className(), ['sourse_id' => 'id'])
             ->where(['status' => Category::STATUS_ACTIVE]);
+    }
+
+    public function getCrawlerNews()
+    {
+        return $this->hasMany(News::className(), ['resourse_id' => 'id'])
+            ->where(['status' => News::STATUS_CRAWLER]);
     }
 
     public function urlParse($key = null)
@@ -297,6 +306,70 @@ class Sourse extends \yii\db\ActiveRecord
         ];
     }
 
+    public function parseProperties()
+    {
+        $news = News::find()
+            ->joinWith(['smi.cssSeletors','newsFullText','sourse'])
+            ->where([
+                    'and',
+                        [
+                            'sourse.type' => self::TYPE_RSS
+                        ],
+                        [
+                            'news.status' => News::STATUS_SPIDER,
+                        ],
+                        
+                ])
+            ->all();
+        if (empty($news) !== false) {
+            $this->error('There are not news for parsing');
+            return;
+        }
+        foreach ($news as $item) {
+            if ($item->url === null) {
+                $this->error('The URL of news is null');
+                return;
+            }
+            $client = new CurlClient();
+            $content = $client->parsePage($item->url);
+            $properties = $item->smi->cssSeletors;
+            
+            if (empty($properties) === false) {
+                foreach ($properties as $property) {
+                    if ($item->title === null && $property->name === CssSelector::NAME_TITLE) {
+                        $title = $client->parseProperty($content,$property->type,$property->selector,$item->url,$property->attr);
+                        $item->title = $title[0];
+                    }
+                    if ($item->newsFullText === null && $property->name === CssSelector::NAME_DESCRIPTION) {
+                        $description = $client->parseProperty($content,$property->type,$property->selector,$item->url,$property->attr);
+                        if (empty($description[0]) === false) {
+                            $new_text = new NewsFullText();
+                            $new_text->text = $description[0];
+                            $new_text->news_id = $item->id;
+                            $new_text->save();
+                        }
+                        
+                    }
+                    if ($property->name !== CssSelector::NAME_TITLE && $property->name !== CssSelector::NAME_DESCRIPTION) {
+                        $others = $client->parseProperty($content,$property->type,$property->selector,$item->url,$property->attr);
+                        if (empty($others) === false) {
+                            foreach ($others as $other) {
+                                $new_prop = new NewsProperty();
+                                $new_prop->news_id = $item->id;
+                                $new_prop->css_selector_id = $property->id;
+                                $new_prop->value = $other;
+                                $new_prop->save();
+                            }
+                        }
+                    }
+
+                }
+                $item->status = $item::STATUS_CRAWLER;
+                $item->save();
+            }
+        }
+    }
+
     protected static function success($message)
     {
         Console::output(Console::ansiFormat($message, [Console::FG_GREEN]));
@@ -307,8 +380,13 @@ class Sourse extends \yii\db\ActiveRecord
         Console::output(Console::ansiFormat($message, [Console::FG_RED]));
     }
 
-    public function getCssSeletors()
+    public function getCssSeletors($index = null)
     {
+        if ($index !== null) {
+            return $this->hasMany(CssSelector::className(), ['sourse_id' => 'id'])->indexBy($index);
+        }
         return $this->hasMany(CssSelector::className(), ['sourse_id' => 'id']);
+        
     }
+
 }

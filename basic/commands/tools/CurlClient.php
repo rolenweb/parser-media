@@ -99,7 +99,7 @@ class CurlClient implements ClientInterface
 		return;
 	}
 
-	public function parseProperty($content,$type,$pattern,$url = null)
+	public function parseProperty($content,$type,$pattern,$url = null,$attr = null)
 	{
 		$parser = (new SymfonyParser)->in($content, $this->getContentType());
 		$result = [];
@@ -122,8 +122,8 @@ class CurlClient implements ClientInterface
 			}
 		}
 
-		if ($type === 'src') {
-			$result = $parser->findSrc($pattern);
+		if ($type === 'attribute') {
+			$result = $parser->filter($pattern)->extract(array($attr));
 		}
 		return $result;
 	}

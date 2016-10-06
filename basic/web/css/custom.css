@@ -8,6 +8,16 @@
     width: 1590px;
   }
 }
+div.container ul.head-pult li:hover {
+  background-color: #ccc;
+}
+div.container ul.head-pult li.active {
+  background-color: #ccc;
+}
+div.container ul.head-pult span.subject,
+div.container ul.head-pult span.rss {
+  cursor: pointer;
+}
 div.container div.block-list-subject {
   height: 800px;
   overflow-y: scroll;
@@ -22,6 +32,9 @@ div.container div.block-list-subject div.block-list-news {
   width: 100%;
   padding: 1px 5px;
   background-color: #ccc;
+}
+div.container div.block-list-rss ul li.li-rss {
+  cursor: pointer;
 }
 div.container div.pult-details-subject div.row-title {
   border-top: 1px solid #ccc;
@@ -82,4 +95,11 @@ div.container div.block-details-subject div.list-smi li.full-text-news span.abbr
 div.container div.block-details-subject div.list-smi li.full-text-news span.number-in-text {
   color: white;
   background-color: red;
+}
+div.container div.block-details-subject div.list-smi li.news-property span.name-property {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+div.container div.block-details-subject div.list-smi li.news-property span.value-property {
+  margin-left: 10px;
 }

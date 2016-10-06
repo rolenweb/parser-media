@@ -21,10 +21,14 @@ use app\components\LogDateBehavior;
 class CssSelector extends \yii\db\ActiveRecord
 {
     const STR = 'string';
-    const TEXT = 'text';
-    const HREF = 'href';
-    const SRC = 'src';
+    const ATTR = 'attribute';
     const LINK = 'link';
+
+    const NAME_TITLE = 'title';
+    const NAME_URL = 'url';
+    const NAME_DESCRIPTION = 'description';
+    const NAME_IMAGE = 'image';
+    const NAME_DATE = 'date';
     /**
      * @inheritdoc
      */
@@ -48,7 +52,7 @@ class CssSelector extends \yii\db\ActiveRecord
     {
         return [
             [['sourse_id', 'news_id', 'created_at', 'updated_at'], 'integer'],
-            [['name', 'selector', 'type'], 'string', 'max' => 255],
+            [['name', 'selector', 'type','attr'], 'string', 'max' => 255],
         ];
     }
 
@@ -62,6 +66,7 @@ class CssSelector extends \yii\db\ActiveRecord
             'name' => 'Name',
             'selector' => 'Selector',
             'type' => 'Type',
+            'attr' => 'Attr',
             'sourse_id' => 'Sourse ID',
             'news_id' => 'News ID',
             'created_at' => 'Created At',
@@ -73,9 +78,7 @@ class CssSelector extends \yii\db\ActiveRecord
     {
         return [
             self::STR => self::STR,
-            self::TEXT => self::TEXT,
-            self::HREF => self::HREF,
-            self::SRC => self::SRC,
+            self::ATTR => self::ATTR,
             self::LINK => self::LINK,
         ];
     }

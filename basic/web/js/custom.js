@@ -115,13 +115,91 @@ $(function() {
 		var text = single_news.find('li.full-text-news');
 		var block_template = home.find('div[name = "block-template-news"]');
 		var old_content = tinyMCE.activeEditor.getContent();
-		console.log(old_content);
 		tinyMCE.activeEditor.setContent(old_content+'<hr><p>'+text.text()+'</p>');
 	});
+
+	home.on('click', 'div[name = "block-details-subject"] button[name = "btn-status-news"]',function( event ) {	
+    	var button = $(this);
+		var block_result = home.find('ul[name = "single-news"] li[name = "block-result"]');
+		$.post(
+            '/site/processed-news',
+            {
+            	news: button.attr('news')
+            }
+        ).done(function( data ) {
+        		if (data === 'ok') {
+        			button.text('Обработана');
+        			button.removeClass('btn-danger').addClass('btn-default');
+        		}else{
+        			block_result.html(data)
+        		}
+            	
+        	}
+        ).fail( function(xhr, textStatus, errorThrown) {
+            	alert(xhr.responseText);
+        	}
+        );
+	});
+
 
 	home.on('click', 'div.sort-list-smi label[for = "keyword"]',function( event ) {	
     	home.find('div.keywords-stats').toggle();
 	});
 
+	home.on('click', 'ul.head-pult li span',function( event ) {	
+		deactiveHeadPult();
+		var span = $(this);
+		span.parents('li').addClass('active');
+		reloadLeaftArea(span.attr('type'));
+	});
+
+	function deactiveHeadPult() {
+		var list = home.find('ul.head-pult li').removeClass('active');
+
+	}
+
+	function reloadLeaftArea(type) {
+		var block_reload = home.find('td[name = "td-left-area"]');
+		block_reload.empty().append('<div class="text-center"><i class = "fa fa-spinner fa-pulse fa-4x"></i></div>');
+		$.post(
+            '/site/reload-left-area',
+            {
+            	type: type
+            }
+        ).done(function( data ) {
+            	block_reload.html(data)	
+            	
+        	}
+        ).fail( function(xhr, textStatus, errorThrown) {
+            	alert(xhr.responseText);
+        	}
+        );
+        
+	}
+
+	home.on('click', 'td[name = "td-left-area"] div.block-list-rss li.li-rss',function( event ) {	
+		var li = $(this);
+		loadDetailsRss(li);
+	});
+
+	function loadDetailsRss(obj) {
+		var block_reload = home.find('div[name = "block-details-subject"]');
+		block_reload.append('<div class="text-center"><i class = "fa fa-spinner fa-pulse fa-4x"></i></div>');
+		$.post(
+            '/site/load-details-rss',
+            {
+            	rss: obj.attr('rss')
+            }
+        ).done(function( data ) {
+            	block_reload.html(data);
+            	//setKeywordsInput();
+        	}
+        ).fail( function(xhr, textStatus, errorThrown) {
+            	alert(xhr.responseText);
+        	}
+        );
+	}
+
 	
+
 });

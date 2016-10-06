@@ -22,11 +22,13 @@ if (empty($news) === false) {
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'name')->textInput(['maxlength' => true])->label('Выберите один из предложенных: '.Html::tag('span',$model::NAME_TITLE).', '.Html::tag('span',$model::NAME_DESCRIPTION).', '.Html::tag('span',$model::NAME_URL).', '.Html::tag('span',$model::NAME_IMAGE).', '.Html::tag('span',$model::NAME_DATE))  ?>
 
     <?= $form->field($model, 'selector')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'type')->dropDownList(CssSelector::ddType()) ?>
+
+    <?= $form->field($model, 'attr')->textInput(['maxlength' => true])->hiddenInput()->label(false) ?>
 
     <?= $form->field($model, 'sourse_id')->textInput(['maxlength' => true])->hiddenInput()->label(false) ?>
 

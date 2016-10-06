@@ -206,12 +206,14 @@ class CssSelectorController extends Controller
                     'error' => $error,
                 ]);
             }
-            
+
+            $attr = ($selector->attr !== null) ? $selector->attr : null;
+                        
             $client = new CurlClient();
 
             $content = $client->parsePage($parse_url);
 
-            $property = $client->parseProperty($content,$selector->type,$selector->selector);
+            $property = $client->parseProperty($content,$selector->type,$selector->selector,$parse_url,$attr);
 
             return $this->renderAjax('_result_test', [
                     'property' => $property

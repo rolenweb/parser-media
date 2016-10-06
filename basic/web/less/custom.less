@@ -13,6 +13,19 @@ div.container{
 	@media (min-width: 1600px){
 		width: 1590px;
 	}
+	ul.head-pult{
+		li{
+			&:hover{
+				background-color: @active-color;
+			}
+		}
+		li.active{
+			background-color: @active-color;
+		}
+		span.subject,span.rss{
+			cursor: pointer;
+		}
+	}
 	div.block-list-subject{
 		height: 800px;
 
@@ -32,6 +45,13 @@ div.container{
 			width: 100%;
 			padding: 1px 5px;
 			background-color: @border-color;
+		}
+	}
+	div.block-list-rss{
+		ul{
+			li.li-rss{
+				cursor: pointer;
+			}
 		}
 	}
 	div.pult-details-subject{
@@ -100,6 +120,15 @@ div.container{
 				span.number-in-text{
 					color: @white-text;
 					background-color: @number-color;		
+				}
+			}
+			li.news-property{
+				span.name-property{
+					font-weight: bold;
+					text-transform: uppercase;
+				}
+				span.value-property{
+					margin-left: 10px;
 				}
 			}
 			

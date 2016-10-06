@@ -9,6 +9,7 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\Sourse;
 use app\models\Subject;
+use app\models\News;
 
 class SiteController extends Controller
 {
@@ -20,7 +21,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout','index','login','load-details-subject','processed-subject'],
+                'only' => ['logout','index','login','load-details-subject','processed-subject','reload-left-area','processed-news'],
                 'rules' => [
                     [
                         'actions' => ['logout'],
@@ -33,7 +34,7 @@ class SiteController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['index','load-details-subject','processed-subject'],
+                        'actions' => ['index','load-details-subject','processed-subject','reload-left-area','processed-news'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
@@ -71,9 +72,25 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $subjects = Subject::find()->where(['status' => Subject::STATUS_SPIDER])->orderBy(['created_at' => SORT_DESC])->limit(50)->all();
+        $query_subject = Subject::find()->where(['status' => Subject::STATUS_SPIDER])->orderBy(['created_at' => SORT_DESC]);
+        $count_subject = $query_subject->count();
+        $subjects = $query_subject->limit(50)->all();
+
+        $count_rss_news = News::find()->joinWith('sourse')->where(
+            [
+                'and',
+                    [
+                        'news.status' => News::STATUS_CRAWLER
+                    ],
+                    [
+                        'sourse.type' => Sourse::TYPE_RSS
+                    ]
+            ])->count();
+
         return $this->render('index',[
             'subjects' => $subjects,
+            'count_subject' => $count_subject,
+            'count_rss_news' => $count_rss_news,
             ]);
 
     }
@@ -196,5 +213,144 @@ class SiteController extends Controller
             return $this->redirect(['site/index']);
         }
     }
+    
+    public function actionProcessedNews()
+    {
+        if(Yii::$app->request->isAjax){
+
+            $error = [];
+            $info = [];
+
+            $post_data = Yii::$app->request->post();
+
+            if (!isset($post_data)) {
+                $error[] = 'The post data is not set';
+                return $this->renderAjax('_result', [
+                    'error' => $error,
+                ]);
+            }
+
+            $news = News::findOne($post_data['news']);
+
+            if ($news === null) {
+                $error[] = 'The news is not found';
+                return $this->renderAjax('_result', [
+                    'error' => $error,
+                ]);
+            }
+
+            $news->status = News::STATUS_PROCESSED;
+            if ($news->save()) {
+                return 'ok';
+            }else{
+                foreach ($news->getErrors() as $er) {
+                    $error[] = $er[0];
+                }
+                return $this->renderAjax('_error', [
+                    'error' => $error,
+                ]);
+            }
+            
+
+        }
+        else{
+            Yii::$app->session->setFlash('error', 'Fuck, hands off of this page.');
+            return $this->redirect(['site/index']);
+        }
+    }
+
+    public function actionReloadLeftArea()
+    {
+        if(Yii::$app->request->isAjax){
+
+            $error = [];
+            $info = [];
+
+            $post_data = Yii::$app->request->post();
+
+            if (!isset($post_data)) {
+                $error[] = 'The post data is not set';
+                return $this->renderAjax('_result', [
+                    'error' => $error,
+                ]);
+            }
+
+            
+            if (!isset($post_data['type'])) {
+                $error[] = 'The type is not set';
+                return $this->renderAjax('_result', [
+                    'error' => $error,
+                ]);
+            }
+            
+            
+            if ($post_data['type'] === 'subject') {
+                $query_subject = Subject::find()->where(['status' => Subject::STATUS_SPIDER])->orderBy(['created_at' => SORT_DESC]);
+                $count_subject = $query_subject->count();
+                $subjects = $query_subject->limit(50)->all();
+                return $this->renderAjax('subject/_list', [
+                    'subjects' => $subjects,
+                    
+                ]);
+            }
+
+            if ($post_data['type'] === 'rss') {
+                $rss = Sourse::find()->with('crawlerNews')->where(
+                    [
+                        'and',
+                            ['type' => Sourse::TYPE_RSS],
+                            ['status' => Sourse::STATUS_ACTIVE]            
+                    ]
+                )->all();
+                return $this->renderAjax('rss/_list', [
+                    'rss' => $rss,
+                    
+                ]);
+            }
+        }
+        else{
+            Yii::$app->session->setFlash('error', 'Fuck, hands off of this page.');
+            return $this->redirect(['site/index']);
+        }
+    }
+    public function actionLoadDetailsRss()
+    {
+        if(Yii::$app->request->isAjax){
+
+            $error = [];
+            $info = [];
+
+            $post_data = Yii::$app->request->post();
+
+            if (!isset($post_data)) {
+                $error[] = 'The post data is not set';
+                return $this->renderAjax('_result', [
+                    'error' => $error,
+                ]);
+            }
+
+            $rss = Sourse::findOne($post_data['rss']);
+
+            if ($rss === null) {
+                $error[] = 'The rss is not found';
+                return $this->renderAjax('_result', [
+                    'error' => $error,
+                ]);
+            }
+            
+
+            return $this->renderAjax('rss/_single_details', [
+                    'rss' => $rss,
+                    //'keywords_stats' => $subject->phraseStats(),
+            ]);
+            
+
+        }
+        else{
+            Yii::$app->session->setFlash('error', 'Fuck, hands off of this page.');
+            return $this->redirect(['site/index']);
+        }
+    }
+    
     
 }
