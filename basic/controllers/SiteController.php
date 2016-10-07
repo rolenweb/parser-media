@@ -395,6 +395,7 @@ class SiteController extends Controller
             $new_post->title = trim($post_data['title']);
             $new_post->preview = trim($post_data['preview']);
             $new_post->content = trim($post_data['text']);
+            $new_post->status = Post::STATUS_SAVE;
             if ($new_post->save()) {
                 $info[] = 'Пост сохранен ('.Html::a('посмотреть',['post/view','id' => $new_post->id],['target' => '_black']).').';
                 return $this->renderAjax('_result', [
