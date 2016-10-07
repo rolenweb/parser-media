@@ -21,6 +21,8 @@ echo Html::beginTag('ul',['class' => 'list-unstyled', 'name' => 'single-news']);
 							echo $item->markingText;
 							//echo '----------------';
 							//echo $item->newsFullText->text;
+						}else{
+							echo $item->preview;
 						}
 					echo Html::endTag('li');
 					echo Html::beginTag('li',['class' => 'news-property']);
@@ -40,6 +42,7 @@ echo Html::beginTag('ul',['class' => 'list-unstyled', 'name' => 'single-news']);
 
 					echo Html::endTag('li');
 					echo Html::beginTag('li',['class' => 'input-to-template text-right']);
+						echo Html::a('Оригинал',$item->url,['class' => 'btn btn-warning btn-xs','target' => '_blank']);
 						echo Html::button(($item->status === $item::STATUS_PROCESSED) ? 'Обработана' : 'Не обработана',['class' => ($item->status === $item::STATUS_PROCESSED) ? 'btn btn-default btn-xs' : 'btn btn-danger btn-xs','name' => 'btn-status-news','news' => $item->id]);
 						if ($item->newsFullText !== null) {
 							echo Html::button('Вставить',['class' => 'btn btn-primary btn-xs','name' => 'input-to-template']);

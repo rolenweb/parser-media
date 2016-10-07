@@ -28,6 +28,10 @@ use Yii;
  */
 class NewsSites extends \yii\db\ActiveRecord
 {
+
+    const FULLTEXT_NO = 1;
+    const FULLTEXT_YES = 2;
+
     /**
      * @inheritdoc
      */
@@ -42,7 +46,7 @@ class NewsSites extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['federal', 'region', 'rubric', 'type', 'CY', 'region2', 'comment'], 'integer'],
+            [['federal', 'region', 'rubric', 'type', 'CY', 'region2', 'comment','fulltext'], 'integer'],
             [['region2', 'site', 'alexa_gk','federal'], 'required'],
             [['name', 'url', 'email', 'adres', 'telephone', 'manager', 'MLG', 'uri', 'site', 'alexa_gk'], 'string', 'max' => 255],
         ];
@@ -78,5 +82,13 @@ class NewsSites extends \yii\db\ActiveRecord
     public function getCssSeletors()
     {
         return $this->hasMany(CssSelector::className(), ['news_id' => 'id']);
+    }
+
+    public static function ddFullText()
+    {
+        return [
+            self::FULLTEXT_NO => 'Нет',
+            self::FULLTEXT_YES => 'Да',
+        ];
     }
 }

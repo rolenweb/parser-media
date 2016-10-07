@@ -34,6 +34,10 @@ echo Html::beginTag('div',['class' => 'news-sites-view']);
             'site',
             'alexa_gk',
             'comment',
+            [
+                'label' => 'Полнотекст',
+                'value' => ($model->fulltext === $model::FULLTEXT_YES) ? 'Да' : 'Нет',
+            ],
         ],
     ]);
     echo Html::beginTag('p',['class' => 'text-right']);

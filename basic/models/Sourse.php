@@ -11,6 +11,7 @@ use app\models\News;
 use app\models\NewsFullText;
 use app\models\CssSelector;
 use app\models\NewsProperty;
+use app\models\NewsSites;
 
 use app\commands\tools\NewsParser;
 use app\commands\tools\CurlClient;
@@ -239,6 +240,76 @@ class Sourse extends \yii\db\ActiveRecord
         }    
     }
 
+    public function fullTextParseYandex2()
+    {
+         $news = News::find()
+            ->joinWith(['smi.cssSeletors','subject.sourse'])
+            ->where([
+                    'and',
+                        [
+                            'sourse.name' => 'yandex' 
+                        ],
+                        [
+                            'news_sites.fulltext' => NewsSites::FULLTEXT_YES,
+                        ],
+                        [
+                            'news.status' => News::STATUS_SPIDER,
+                        ],
+                        
+                ])
+            ->all();//createCommand()->params;//->sql;
+        
+        if (empty($news) === true) {
+            $this->error('There are not news for parsing');
+            return;
+        }
+
+        foreach ($news as $item) {
+            if ($item->url === null) {
+                $this->error('The URL of news is null');
+                return;
+            }
+            $this->success('Parse full text: '.$item->url);
+            $client = new CurlClient();
+            $content = $client->parsePage($item->url);
+            $properties = $item->smi->cssSeletors;
+            
+            if (empty($properties) === false) {
+                foreach ($properties as $property) {
+                    if ($item->title === null && $property->name === CssSelector::NAME_TITLE) {
+                        $title = $client->parseProperty($content,$property->type,$property->selector,$item->url,$property->attr);
+                        $item->title = $title[0];
+                    }
+                    if ($item->newsFullText === null && $property->name === CssSelector::NAME_DESCRIPTION) {
+                        $description = $client->parseProperty($content,$property->type,$property->selector,$item->url,$property->attr);
+                        if (empty($description) === false) {
+                            $new_text = new NewsFullText();
+                            $new_text->text = $this->sumFullText($description);
+                            $new_text->news_id = $item->id;
+                            $new_text->save();
+                        }
+                        
+                    }
+                    if ($property->name !== CssSelector::NAME_TITLE && $property->name !== CssSelector::NAME_DESCRIPTION) {
+                        $others = $client->parseProperty($content,$property->type,$property->selector,$item->url,$property->attr);
+                        if (empty($others) === false) {
+                            foreach ($others as $other) {
+                                $new_prop = new NewsProperty();
+                                $new_prop->news_id = $item->id;
+                                $new_prop->css_selector_id = $property->id;
+                                $new_prop->value = $other;
+                                $new_prop->save();
+                            }
+                        }
+                    }
+
+                }
+                $item->status = $item::STATUS_CRAWLER;
+                $item->save();
+            }
+        }
+    }
+
     public function getListRequestYandexFullText()
     {
         return [    
@@ -387,6 +458,17 @@ class Sourse extends \yii\db\ActiveRecord
         }
         return $this->hasMany(CssSelector::className(), ['sourse_id' => 'id']);
         
+    }
+
+    public function sumFullText($description)
+    {
+        $out = '';
+        if (empty($description) === false) {
+            foreach ($description as $item) {
+                $out .= '<p>'.$item.'</p>';
+            }
+        }
+        return $out;
     }
 
 }

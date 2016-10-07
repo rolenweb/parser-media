@@ -12,11 +12,11 @@ if (empty($subjects) === false) {
 						echo Html::tag('h4',$subject->title,['name' => 'title-silgle-subject']);
 					echo Html::endTag('div');	
 					if ($subject->firstNews != NULL) {
-						echo Html::beginTag('div',['class' => 'col-sm-8']);
+						echo Html::beginTag('div',['class' => 'col-sm-6']);
 							echo Html::tag('span',date("d/m/y H:i",$subject->firstNews->time),['class' => 'label label-default']);
 						echo Html::endTag('div');
-						echo Html::beginTag('div',['class' => 'col-sm-4']);
-							echo Html::button('Обработан',['class' => 'btn btn-primary btn-xs', 'name' => 'processed-subject', 'subject' => $subject->id]);
+						echo Html::beginTag('div',['class' => 'col-sm-6 text-right']);
+							echo Html::button('Не обработан',['class' => 'btn btn-danger btn-xs', 'name' => 'processed-subject', 'subject' => $subject->id]);
 						echo Html::endTag('div');
 
 						echo Html::beginTag('div',['class' => 'col-sm-12']);

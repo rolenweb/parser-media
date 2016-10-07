@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
+
 /* @var $this yii\web\View */
 /* @var $model app\models\NewsSites */
 /* @var $form yii\widgets\ActiveForm */
@@ -45,6 +46,8 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'alexa_gk')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'comment')->textInput() ?>
+
+    <?= $form->field($model, 'fulltext')->dropDownList($model::ddFullText()) ?>
 
     <div class="form-group text-right">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

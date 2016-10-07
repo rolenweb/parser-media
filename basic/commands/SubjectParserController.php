@@ -47,7 +47,6 @@ class SubjectParserController extends BaseCommand
                 $this->error('Sourse not found');
                 return;
             }
-
             if (empty($sourse->keysParse) === false) {
                 foreach ($sourse->keysParse as $key) {
                     $parse_url = $sourse->urlParse($key);
@@ -68,7 +67,7 @@ class SubjectParserController extends BaseCommand
 
             $sourse = Sourse::find()->where(['and',['name' => 'yandex'],['status' => Sourse::STATUS_ACTIVE]])->limit(1)->one();
             if (empty($sourse) === false) {
-                $sourse->fullTextParseYandex();
+                $sourse->fullTextParseYandex2();
             }
             $this->success("Sleep: 15 мин.");    
             sleep(900);
