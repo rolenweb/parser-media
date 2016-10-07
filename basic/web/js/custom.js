@@ -200,6 +200,22 @@ $(function() {
         );
 	}
 
-	
+	home.on('submit', 'div[name = "block-template-news"] form[name = "create-news"]',function( event ) {	
+		var form = $(this);
+		var block_result = form.find('div[name = "block-result"]');
+		block_result.empty().append('<div class="text-center"><i class = "fa fa-spinner fa-pulse fa-4x"></i></div>');
+		
+        $.post(
+	            '/site/create-news',
+	            form.serializeArray()
+	        ).done(function( data ) {
+	          block_result.html(data);
+	          }
+	        ).fail( function(xhr, textStatus, errorThrown) {
+	            alert(xhr.responseText);
+	            }
+	    );
+      	event.preventDefault();
+	});
 
 });

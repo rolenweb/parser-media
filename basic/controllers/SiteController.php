@@ -6,10 +6,12 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
+use yii\helpers\Html;
 use app\models\LoginForm;
 use app\models\Sourse;
 use app\models\Subject;
 use app\models\News;
+use app\models\Post;
 
 class SiteController extends Controller
 {
@@ -21,7 +23,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout','index','login','load-details-subject','processed-subject','reload-left-area','processed-news'],
+                'only' => ['logout','index','login','load-details-subject','processed-subject','reload-left-area','processed-news','create-news'],
                 'rules' => [
                     [
                         'actions' => ['logout'],
@@ -34,7 +36,7 @@ class SiteController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['index','load-details-subject','processed-subject','reload-left-area','processed-news'],
+                        'actions' => ['index','load-details-subject','processed-subject','reload-left-area','processed-news','create-news'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
@@ -352,5 +354,68 @@ class SiteController extends Controller
         }
     }
     
+    public function actionCreateNews()
+    {
+        if(Yii::$app->request->isAjax){
+
+            $error = [];
+            $info = [];
+
+            $post_data = Yii::$app->request->post();
+
+            if (!isset($post_data)) {
+                $error[] = 'The post data is not set';
+                return $this->renderAjax('_result', [
+                    'error' => $error,
+                ]);
+            }
+
+            if (empty($post_data['title'])) {
+                $error[] = 'The title is null';
+                return $this->renderAjax('_result', [
+                    'error' => $error,
+                ]);
+            }
+            
+            if (empty($post_data['preview'])) {
+                $error[] = 'The preview is null';
+                return $this->renderAjax('_result', [
+                    'error' => $error,
+                ]);
+            }
+
+            if (empty($post_data['text'])) {
+                $error[] = 'The text is null';
+                return $this->renderAjax('_result', [
+                    'error' => $error,
+                ]);
+            }
+
+            $new_post = new Post();
+            $new_post->title = trim($post_data['title']);
+            $new_post->preview = trim($post_data['preview']);
+            $new_post->content = trim($post_data['text']);
+            if ($new_post->save()) {
+                $info[] = 'Пост сохранен ('.Html::a('посмотреть',['post/view','id' => $new_post->id],['target' => '_black']).').';
+                return $this->renderAjax('_result', [
+                    'info' => $info,
+                ]);
+            }else{
+                foreach ($new_post->getErrors() as $er) {
+                    $error[] = $er[0];
+                }
+                return $this->renderAjax('_error', [
+                    'error' => $error,
+                ]);
+            }
+            
+            
+
+        }
+        else{
+            Yii::$app->session->setFlash('error', 'Fuck, hands off of this page.');
+            return $this->redirect(['site/index']);
+        }
+    }
     
 }

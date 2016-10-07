@@ -5,6 +5,13 @@
 @number-color: red;
 @white-text: white;
 
+.margin-top(@x){
+	margin-top: @x;
+}
+.margin-bottom(@x){
+	margin-bottom: @x;
+}
+
 div.container{
 	@media (min-width: 1400px){
 		width: 1390px;
@@ -134,5 +141,19 @@ div.container{
 			
 		}
 
+	}
+	div.block-template-news{
+		form{
+			div.div-submit{
+				.margin-top(10px);
+			}
+			div[name = "block-result"]{
+				.margin-top(10px);
+				.alert{
+					.margin-bottom(0px;)	
+				}
+				
+			}
+		}
 	}
 }

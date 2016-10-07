@@ -103,3 +103,12 @@ div.container div.block-details-subject div.list-smi li.news-property span.name-
 div.container div.block-details-subject div.list-smi li.news-property span.value-property {
   margin-left: 10px;
 }
+div.container div.block-template-news form div.div-submit {
+  margin-top: 10px;
+}
+div.container div.block-template-news form div[name="block-result"] {
+  margin-top: 10px;
+}
+div.container div.block-template-news form div[name="block-result"] .alert {
+  margin-bottom: 0px;
+}

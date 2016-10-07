@@ -37,6 +37,7 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             ['label' => 'Главная', 'url' => ['/site/index'], 'visible' => Yii::$app->user->can('admin')],
+            ['label' => 'Посты', 'url' => ['/post/index'], 'visible' => Yii::$app->user->can('admin')],
             ['label' => 'Ресурсы', 'url' => ['/sourse/index'], 'visible' => Yii::$app->user->can('admin')],
             [
                 'label' => 'Списки',   
