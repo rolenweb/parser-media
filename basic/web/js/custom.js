@@ -200,6 +200,29 @@ $(function() {
         );
 	}
 
+	home.on('click', 'td[name = "td-left-area"] div.block-list-mail li.li-mail',function( event ) {	
+		var li = $(this);
+		loadDetailsMail(li);
+	});
+
+	function loadDetailsMail(obj) {
+		var block_reload = home.find('div[name = "block-details-subject"]');
+		block_reload.append('<div class="text-center"><i class = "fa fa-spinner fa-pulse fa-4x"></i></div>');
+		$.post(
+            '/site/load-details-mail',
+            {
+            	mail: obj.attr('mail')
+            }
+        ).done(function( data ) {
+            	block_reload.html(data);
+            	//setKeywordsInput();
+        	}
+        ).fail( function(xhr, textStatus, errorThrown) {
+            	alert(xhr.responseText);
+        	}
+        );
+	}
+
 	home.on('submit', 'div[name = "block-template-news"] form[name = "create-news"]',function( event ) {	
 		var form = $(this);
 		var block_result = form.find('div[name = "block-result"]');

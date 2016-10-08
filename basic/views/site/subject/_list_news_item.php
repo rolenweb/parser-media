@@ -1,5 +1,8 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\HtmlPurifier;
+
+use app\models\Sourse;
 
 echo Html::beginTag('ul',['class' => 'list-unstyled', 'name' => 'single-news']);
 					echo Html::beginTag('li',['class' => 'title-smi']);
@@ -18,9 +21,17 @@ echo Html::beginTag('ul',['class' => 'list-unstyled', 'name' => 'single-news']);
 					echo Html::endTag('li');
 					echo Html::beginTag('li',['class' => 'full-text-news']);
 						if ($item->newsFullText !== null) {
-							echo $item->markingText;
-							//echo '----------------';
-							//echo $item->newsFullText->text;
+							//echo //$item->markingText;
+							if ($item->sourse !== null) {
+								if ($item->sourse->type === Sourse::TYPE_MAIL) {
+									echo HtmlPurifier::process($item->newsFullText->text);
+								}else{
+									echo $item->markingText;	
+								}
+							}else{
+								echo $item->markingText;
+							}
+							;
 						}else{
 							echo $item->preview;
 						}

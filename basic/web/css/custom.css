@@ -15,7 +15,8 @@ div.container ul.head-pult li.active {
   background-color: #ccc;
 }
 div.container ul.head-pult span.subject,
-div.container ul.head-pult span.rss {
+div.container ul.head-pult span.rss,
+div.container ul.head-pult span.mail {
   cursor: pointer;
 }
 div.container div.block-list-subject {
@@ -34,6 +35,9 @@ div.container div.block-list-subject div.block-list-news {
   background-color: #ccc;
 }
 div.container div.block-list-rss ul li.li-rss {
+  cursor: pointer;
+}
+div.container div.block-list-mail ul li.li-mail {
   cursor: pointer;
 }
 div.container div.pult-details-subject div.row-title {

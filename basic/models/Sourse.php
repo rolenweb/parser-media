@@ -31,6 +31,7 @@ class Sourse extends \yii\db\ActiveRecord
 
     const TYPE_MEDIA = 1;
     const TYPE_RSS = 2;
+    const TYPE_MAIL = 3;
     const STATUS_ACTIVE = 1;
     const STATUS_PENDING = 2;
     /**
@@ -84,6 +85,9 @@ class Sourse extends \yii\db\ActiveRecord
         if ($this->type == self::TYPE_RSS) {
             return 'RSS';
         }
+        if ($this->type == self::TYPE_MAIL) {
+            return 'MAIL';
+        }
     }
 
     public function getStatusName()
@@ -101,6 +105,7 @@ class Sourse extends \yii\db\ActiveRecord
         return [
             self::TYPE_MEDIA => 'СМИ',
             self::TYPE_RSS => 'RSS',
+            self::TYPE_MAIL => 'MAIL',
         ];
     }
 
@@ -132,7 +137,8 @@ class Sourse extends \yii\db\ActiveRecord
     public function getCrawlerNews()
     {
         return $this->hasMany(News::className(), ['resourse_id' => 'id'])
-            ->where(['status' => News::STATUS_CRAWLER]);
+            ->where(['status' => News::STATUS_CRAWLER])
+            ->orderBy(['time' => SORT_DESC]);
     }
 
     public function urlParse($key = null)

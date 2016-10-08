@@ -19,7 +19,8 @@
         "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "*",
         "vdb/php-spider": "^0.2.0",
-        "omnilight/yii2-scheduling": "*"
+        "omnilight/yii2-scheduling": "*",
+        "php-imap/php-imap": "~2.0"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

@@ -19,6 +19,7 @@ Thumbs.db
 /cookiefile
 /recognize
 /nohup
+/commands/files/mail
 nohup.out
 
 # composer itself is not needed

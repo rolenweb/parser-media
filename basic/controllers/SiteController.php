@@ -89,10 +89,22 @@ class SiteController extends Controller
                     ]
             ])->count();
 
+        $count_mail_news = News::find()->joinWith('sourse')->where(
+            [
+                'and',
+                    [
+                        'news.status' => News::STATUS_CRAWLER
+                    ],
+                    [
+                        'sourse.type' => Sourse::TYPE_MAIL
+                    ]
+            ])->count();
+
         return $this->render('index',[
             'subjects' => $subjects,
             'count_subject' => $count_subject,
             'count_rss_news' => $count_rss_news,
+            'count_mail_news' => $count_mail_news,
             ]);
 
     }
@@ -309,6 +321,20 @@ class SiteController extends Controller
                     
                 ]);
             }
+
+            if ($post_data['type'] === 'mail') {
+                $mails = Sourse::find()->with('crawlerNews')->where(
+                    [
+                        'and',
+                            ['type' => Sourse::TYPE_MAIL],
+                            ['status' => Sourse::STATUS_ACTIVE]            
+                    ]
+                )->all();
+                return $this->renderAjax('mail/_list', [
+                    'mails' => $mails,
+                    
+                ]);
+            }
         }
         else{
             Yii::$app->session->setFlash('error', 'Fuck, hands off of this page.');
@@ -343,6 +369,45 @@ class SiteController extends Controller
 
             return $this->renderAjax('rss/_single_details', [
                     'rss' => $rss,
+                    //'keywords_stats' => $subject->phraseStats(),
+            ]);
+            
+
+        }
+        else{
+            Yii::$app->session->setFlash('error', 'Fuck, hands off of this page.');
+            return $this->redirect(['site/index']);
+        }
+    }
+
+    public function actionLoadDetailsMail()
+    {
+        if(Yii::$app->request->isAjax){
+
+            $error = [];
+            $info = [];
+
+            $post_data = Yii::$app->request->post();
+
+            if (!isset($post_data)) {
+                $error[] = 'The post data is not set';
+                return $this->renderAjax('_result', [
+                    'error' => $error,
+                ]);
+            }
+
+            $mail = Sourse::findOne($post_data['mail']);
+
+            if ($mail === null) {
+                $error[] = 'The mail is not found';
+                return $this->renderAjax('_result', [
+                    'error' => $error,
+                ]);
+            }
+            
+
+            return $this->renderAjax('mail/_single_details', [
+                    'mail' => $mail,
                     //'keywords_stats' => $subject->phraseStats(),
             ]);
             
