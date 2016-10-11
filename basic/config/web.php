@@ -41,8 +41,8 @@ $config = [
                     'levels' => ['error'],
                     'categories' => ['yii\*'],
                     'message' => [
-                       'from' => ['rolenweb@mail.ru'],
-                       'to' => ['rolenweb@yandex.ru'],
+                       'from' => ['rolenweb@yandex.ru'],
+                       'to' => ['rolenweb@mail.ru'],
                        'subject' => 'Parser Media error',
                     ],
                 ],
