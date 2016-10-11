@@ -52,7 +52,7 @@ class LogController extends Controller
      */
     public function actionIndex()
     {
-        test
+        
         $searchModel = new LogSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
