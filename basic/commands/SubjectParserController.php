@@ -86,7 +86,6 @@ class SubjectParserController extends BaseCommand
         foreach ($in as $n => $item) {
             $html = $this->gom_yt($item['link'].'&content=alldocs');
             $subject = $this->parseSingleSubject($html);
-            
             if (empty($subject) === false) {
                 if (isset($item['title'])) {
                     $saved_subject = $this->saveSubject($item['title'],$item['link'],$sourse);
@@ -187,8 +186,6 @@ class SubjectParserController extends BaseCommand
             if (isset($data['links'][$key])) {
                 $old_news = News::findOne(['url' => $data['links'][$key]]);
                 if ($old_news === NULL) {
-                    
-                    
                     $news = new News();
                     $news->title = $title;
                     $news->url = $data['links'][$key];
@@ -198,7 +195,7 @@ class SubjectParserController extends BaseCommand
                     $news->subject_id = $subject->id;
                     $news->status = News::STATUS_SPIDER;
                     if (isset($data['time'][$key])) {
-                        $news->time = strtotime(date("Y-m-d").' '.$data['time'][$key]);
+                        $news->time = $this->getTime($data['time'][$key]);
                     }
                     $arr_url = parse_url($data['links'][$key]);
                     if (empty($arr_url['host']) === false) {
@@ -209,12 +206,29 @@ class SubjectParserController extends BaseCommand
                         }
                     }
                     $news->save();
-                }
-            }else{
-                $old_news->subject_id = $subject->id;
-                $old_news->save();
-            }    
+                    foreach ($news->getErrors() as $er) {
+                        $this->error($er[0]);
+                    }
+                }else{
+                    $old_news->subject_id = $subject->id;
+                    $old_news->save();
+                    foreach ($old_news->getErrors() as $er) {
+                        $this->error($er[0]);
+                    }
+                }  
+            }  
         }
+    }
+
+    public function getTime($time)
+    {
+        $time = str_replace('статья','',$time);
+        
+        if (strtotime(date("Y-m-d").' '.trim($time)) === false) {
+            return strtotime("-1 day",strtotime(date("Y-m-d")));
+        }
+        
+        return strtotime(date("Y-m-d").' '.trim($time));
     }
 
     public function saveLinkCategory($arr,$subject)

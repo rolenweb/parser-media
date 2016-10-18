@@ -44,7 +44,7 @@ class LogDateBehavior extends Behavior
     {
 
         if ($this->owner->attributes != NULL) {
-            $log_date = [];
+            $log_data = [];
             $par_data = [];
             $old_art = $this->owner->oldAttributes;
             foreach ($this->owner->attributes as $key => $attribute) {
