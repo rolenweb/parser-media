@@ -185,7 +185,8 @@ class SubjectParserController extends BaseCommand
         }
         foreach ($data['title'] as $key => $title) {
             if (isset($data['links'][$key])) {
-                if (News::findOne(['url' => $data['links'][$key]]) === NULL) {
+                $old_news = News::findOne(['url' => $data['links'][$key]]);
+                if ($old_news === NULL) {
                     
                     
                     $news = new News();
@@ -209,6 +210,9 @@ class SubjectParserController extends BaseCommand
                     }
                     $news->save();
                 }
+            }else{
+                $old_news->subject_id = $subject->id;
+                $old_news->save();
             }    
         }
     }
