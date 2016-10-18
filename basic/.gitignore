@@ -20,7 +20,7 @@ Thumbs.db
 /recognize
 /nohup
 /commands/files/mail
-nohup.out
+*.out
 
 # composer itself is not needed
 composer.phar
