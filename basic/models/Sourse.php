@@ -154,10 +154,10 @@ class Sourse extends \yii\db\ActiveRecord
             }
         }
         if ($key !== null) {
-            $out_url = 'https://news.yandex.ru/yandsearch?text='.urlencode(trim($key->key)).'&rpt=nnews2&grhow=clutop'.$cat_url.'&within=7&from_day=&from_month=&from_year=&to_day=&to_month=&to_year=&numdoc=30';
+            $out_url = 'https://news.yandex.ru/yandsearch?text='.urlencode(trim($key->key)).'&rpt=nnews2&grhow=clutop'.$cat_url.'&within=7&from_day=&from_month=&from_year=&to_day=&to_month=&to_year=&numdoc=30&nsrc=254136396&nsrc=1040&nsrc=1013&nsrc=1048&nsrc=1372&nsrc=1162&nsrc=1027&nsrc=1116&nsrc=1689&nsrc=1047&nsrc=1040&nsrc=8352&nsrc=1002&nsrc=1063&nsrc=10230';
             
         }else{
-            $out_url = 'https://news.yandex.ru/yandsearch?text=&rpt=nnews2&grhow=clutop'.$cat_url.'&within=7&from_day=&from_month=&from_year=&to_day=&to_month=&to_year=&numdoc=30';
+            $out_url = 'https://news.yandex.ru/yandsearch?text=&rpt=nnews2&grhow=clutop'.$cat_url.'&within=7&from_day=&from_month=&from_year=&to_day=&to_month=&to_year=&numdoc=30&nsrc=254136396&nsrc=1040&nsrc=1013&nsrc=1048&nsrc=1372&nsrc=1162&nsrc=1027&nsrc=1116&nsrc=1689&nsrc=1047&nsrc=1040&nsrc=8352&nsrc=1002&nsrc=1063&nsrc=10230';
         }
         $this->saveCache($out_url,$cat_array,$key);
         return $out_url;
