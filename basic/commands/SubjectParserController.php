@@ -78,34 +78,32 @@ class SubjectParserController extends BaseCommand
 
     public function parseListSubject($in,$sourse)
     {
-        if (empty($in['link'])) {
+        if (empty($in)) {
             $this->error('The array of subject is NULL');
             return;
         }
-        if (empty($in['title'])) {
-            $this->error('The array of subject is NULL');
-            return;
-        }
-        foreach ($in['link'] as $n => $item) {
-            $html = $this->gom_yt($item.'&content=alldocs');
+        
+        foreach ($in as $n => $item) {
+            $html = $this->gom_yt($item['link'].'&content=alldocs');
             $subject = $this->parseSingleSubject($html);
             
             if (empty($subject) === false) {
-                if (isset($in['title'][$n])) {
-                    $saved_subject = $this->saveSubject($in['title'][$n],$item,$sourse);
+                if (isset($item['title'])) {
+                    $saved_subject = $this->saveSubject($item['title'],$item['link'],$sourse);
                 }
                 if (isset($subject['links']) && isset($subject['description']) && isset($subject['title'])) {
                     $this->saveNews($subject,$saved_subject);
                 }
                 
             }
-            $this->success("parse subject: ".$item);
+            $this->success("parse subject: ".$item['link']);
         }
     }
 
     
     public function listSubject($page)
     {
+        $out = [];
         $result = [];
         $client = new CurlClient();
         $parser = new SymfonyParser();
@@ -118,7 +116,14 @@ class SubjectParserController extends BaseCommand
         foreach ($content as $node) {
             $result['title'][] = $node->textContent;
         }
-        return $result;
+        if (empty($result['link']) === false) {
+            foreach ($result['link'] as $key => $link) {
+               $out[$key]['link'] = $link;
+               $out[$key]['title'] = (empty($result['title'][$key]) === false) ? $result['title'][$key] : null;
+            }
+        }
+        krsort($out);
+        return $out;
     }
 
     public function parseSingleSubject($page)

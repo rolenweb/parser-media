@@ -89,8 +89,7 @@ class SiteController extends Controller
             ])->orderBy(['subject.created_at' => SORT_DESC]);
         $subjects = $query_subject->all();
         $count_subject = count($subjects);
-         
-
+        
         $count_rss_news = News::find()->joinWith('sourse')->where(
             [
                 'and',
