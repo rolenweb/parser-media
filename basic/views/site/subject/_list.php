@@ -20,7 +20,7 @@ if (empty($subjects) === false) {
 						echo Html::endTag('div');
 
 						echo Html::beginTag('div',['class' => 'col-sm-12']);
-							echo $subject->firstNews->preview;
+							//echo $subject->firstNews->preview;
 						echo Html::endTag('div');	
 					}
 					
