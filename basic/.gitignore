@@ -20,6 +20,7 @@ Thumbs.db
 /recognize
 /nohup
 /commands/files/mail
+composer.lock
 *.out
 
 # composer itself is not needed
