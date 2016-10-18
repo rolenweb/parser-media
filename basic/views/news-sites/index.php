@@ -22,13 +22,42 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'name',
+            
+            [
+                'attribute'=>'name',
+                'label' => 'Имя',
+              
+                
+            ],
             'url:url',
             'email:email',
-            'adres',
-            'telephone',
-            'manager',
-            'federal',
+            
+            [
+                'attribute'=>'adres',
+                'label' => 'Адрес',
+              
+                
+            ],
+            [
+                'attribute'=>'telephone',
+                'label' => 'Телефон',
+              
+                
+            ],
+            [
+                'attribute'=>'manager',
+                'label' => 'Менеджер',
+              
+                
+            ],
+            [
+                'attribute'=>'fulltext',
+                'label' => 'Полный текст',
+                'content'=>function($data){
+                    return $data->fulltextTitle();
+                }
+                
+            ],
             // 'region',
             // 'rubric',
             // 'type',

@@ -18,7 +18,7 @@ class NewsSitesSearch extends NewsSites
     public function rules()
     {
         return [
-            [['id', 'federal', 'region', 'rubric', 'type', 'CY', 'region2', 'comment'], 'integer'],
+            [['id', 'federal', 'region', 'rubric', 'type', 'CY', 'region2', 'comment','fulltext'], 'integer'],
             [['name', 'url', 'email', 'adres', 'telephone', 'manager', 'MLG', 'uri', 'site', 'alexa_gk'], 'safe'],
         ];
     }
@@ -67,6 +67,7 @@ class NewsSitesSearch extends NewsSites
             'CY' => $this->CY,
             'region2' => $this->region2,
             'comment' => $this->comment,
+            'fulltext' => $this->fulltext,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])

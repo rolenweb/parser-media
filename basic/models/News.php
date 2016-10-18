@@ -184,5 +184,6 @@ class News extends \yii\db\ActiveRecord
     {
         return $this->hasMany(NewsProperty::className(), ['news_id' => 'id']);
     } 
-     
+    
+
 }

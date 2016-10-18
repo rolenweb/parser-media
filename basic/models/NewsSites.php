@@ -91,4 +91,13 @@ class NewsSites extends \yii\db\ActiveRecord
             self::FULLTEXT_YES => 'Да',
         ];
     }
+
+    public function fulltextTitle(){
+        if ($this->fulltext === self::FULLTEXT_NO || $this->fulltext === null) {
+            return 'НЕТ';
+        }
+        if ($this->fulltext === self::FULLTEXT_YES) {
+            return 'Да';
+        }
+    } 
 }
