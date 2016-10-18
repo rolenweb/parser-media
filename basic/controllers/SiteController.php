@@ -11,6 +11,7 @@ use app\models\LoginForm;
 use app\models\Sourse;
 use app\models\Subject;
 use app\models\News;
+use app\models\NewsSites;
 use app\models\Post;
 
 class SiteController extends Controller
@@ -74,7 +75,18 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $query_subject = Subject::find()->where(['status' => Subject::STATUS_SPIDER])->orderBy(['created_at' => SORT_DESC]);
+        $query_subject = Subject::find()->joinWith(['news.smi'])->where([
+                'and',
+                    [
+                        'subject.status' => Subject::STATUS_SPIDER
+                    ],
+                    [
+                        'news_sites.fulltext' => NewsSites::FULLTEXT_YES
+                    ],
+                    [
+                        'between', 'subject.created_at', strtotime(date("Y-m-d")), time() 
+                    ]
+            ])->orderBy(['subject.created_at' => SORT_DESC]);
         $count_subject = $query_subject->count();
         $subjects = $query_subject->limit(50)->all();
 
