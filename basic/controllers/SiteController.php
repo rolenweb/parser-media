@@ -111,7 +111,7 @@ class SiteController extends Controller
                         'sourse.type' => Sourse::TYPE_MAIL
                     ]
             ])->count();
-        die;
+        
         return $this->render('index',[
             'subjects' => $subjects,
             'count_subject' => $count_subject,
