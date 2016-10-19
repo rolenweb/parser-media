@@ -75,7 +75,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $query_subject = Subject::find()->joinWith(['news.smi','firstNews'])->where([
+        $query_subject = Subject::find()->joinWith(['news.smi'])->where([
                 'and',
                     [
                         'subject.status' => Subject::STATUS_SPIDER
