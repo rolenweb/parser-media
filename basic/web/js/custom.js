@@ -28,7 +28,7 @@ $(function() {
 	}
 
 	function titleSubjectTemplate(obj) {
-		home.find('div[name = "block-template-news"] input[name = "title"]').val(obj.find('h4[name = "title-silgle-subject"]').text());
+		home.find('div[name = "block-template-news"] textarea[name = "title"]').val(obj.find('h4[name = "title-silgle-subject"]').text());
 	}
 
 	function numberSubjectReplace(obj) {

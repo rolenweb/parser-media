@@ -5,7 +5,7 @@ echo Html::beginTag('div',['class' => 'row']);
 	echo Html::beginTag('form',['name' => 'create-news']);
 		echo Html::beginTag('div',['class' => 'col-sm-12']);
 			echo Html::label('Заголовок', 'title');
-			echo Html::input('text', 'title', '', ['class' => 'form-control']);
+			echo Html::textarea('title', '', ['class' => 'form-control']);
 		echo Html::endTag('div');
 		echo Html::beginTag('div',['class' => 'col-sm-12']);
 			echo Html::label('Анонс', 'preview');
