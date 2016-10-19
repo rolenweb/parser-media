@@ -42,8 +42,8 @@ echo Html::beginTag('ul',['class' => 'list-unstyled', 'name' => 'single-news']);
 							echo Html::beginTag('ul',['class' => 'list-unstyled']);
 								foreach ($properties as $property) {
 									echo Html::beginTag('li');
-										echo Html::tag('span',($property->cssSelector->name === 'image') ? '' : $property->cssSelector->name.':',['class' => 'name-property']);
-										echo Html::tag('span', ($property->cssSelector->name === 'image') ? '<img = src = "'.$property->value.'" style = "height: 200px;">' : $property->value ,['class' => 'value-property']);
+										echo Html::tag('span',($property->cssSelector->name === 'image' || $property->cssSelector->name === 'small image') ? '' : $property->cssSelector->name.':',['class' => 'name-property']);
+										echo Html::tag('span', ($property->cssSelector->name === 'image' || $property->cssSelector->name === 'small image') ? '<img = src = "'.$property->value.'" style = "height: 200px;">' : $property->value ,['class' => 'value-property']);
 									echo Html::endTag('li');
 								}
 							echo Html::endTag('ul');
