@@ -80,6 +80,13 @@ class Subject extends \yii\db\ActiveRecord
             ->with(['smi']);
     }
 
+    public function getFreshNews()
+    {
+        return $this->hasMany(News::className(), ['subject_id' => 'id'])
+            ->with(['smi'])
+            ->orderBy(['time' => SORT_DESC]);
+    }
+
     
 
     public function getFirstNews()

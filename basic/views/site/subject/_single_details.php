@@ -16,7 +16,7 @@ echo Html::beginTag('div',['class' => 'row keywords-stats']);
 echo Html::endTag('div');
 echo Html::beginTag('div',['class' => 'row list-smi']);
 	echo $this->render('_list_news',[
-			'news' => $subject->news,
+			'news' => $subject->freshNews,
 			
 		]);
 echo Html::endTag('div');
