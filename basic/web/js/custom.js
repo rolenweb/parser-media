@@ -75,7 +75,7 @@ $(function() {
 			tinymce.init(
 		    	{ 
 		        	selector:'div[name = "block-template-news"] [name = "text"]',
-		        	height : 300
+		        	height : 450
 		    	}
 		    );		
 		}

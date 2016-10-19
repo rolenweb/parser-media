@@ -20,7 +20,7 @@ div.container ul.head-pult span.mail {
   cursor: pointer;
 }
 div.container div.block-list-subject {
-  height: 800px;
+  height: 830px;
   overflow-y: scroll;
   overflow-x: hidden;
 }
