@@ -63,7 +63,7 @@ div.container div.pult-details-subject div.sort-list-smi label[for="keyword"] {
   cursor: pointer;
 }
 div.container div.block-details-subject {
-  height: 500px;
+  height: 600px;
   overflow-y: scroll;
 }
 div.container div.block-details-subject div.keywords-stats {
