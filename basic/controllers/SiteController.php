@@ -87,7 +87,7 @@ class SiteController extends Controller
                         'between', 'subject.created_at', strtotime(date("Y-m-d")), time() 
                     ]
             ])->orderBy(['subject.created_at' => SORT_DESC]);
-        $subjects = $query_subject->limit(400)->all();
+        $subjects = $query_subject->limit(1000)->all();
         $count_subject = count($subjects);
         
         $count_rss_news = News::find()->joinWith('sourse')->where(
