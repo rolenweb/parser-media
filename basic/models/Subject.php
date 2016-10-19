@@ -75,7 +75,7 @@ class Subject extends \yii\db\ActiveRecord
     public function getNews()
     {
         return $this->hasMany(News::className(), ['subject_id' => 'id'])
-            ->with(['smi','newsFullText']);
+            ->with(['smi']);
     }
 
     
