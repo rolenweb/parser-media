@@ -6,6 +6,8 @@ use Yii;
 use yii\helpers\Html;
 use yii\behaviors\TimestampBehavior;
 use app\components\LogDateBehavior;
+
+use app\models\NewsSites;
 /**
  * This is the model class for table "subject".
  *
@@ -99,7 +101,10 @@ class Subject extends \yii\db\ActiveRecord
         if (empty($news) === false) {
             foreach ($news as $item) {
                 if ($item->smi !== null) {
-                    $out[] = $item->smi->name;
+                    if ($item->smi->fulltext === NewsSites::FULLTEXT_YES) {
+                        $out[] = $item->smi->name;
+                    }
+                    
                 }
             }
         }
@@ -112,6 +117,7 @@ class Subject extends \yii\db\ActiveRecord
         
     }
 
+    
     public function formatListNameSmi($list)
     {
         $out = '';

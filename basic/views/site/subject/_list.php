@@ -28,7 +28,7 @@ if (empty($subjects) === false) {
 					echo Html::beginTag('div',['class' => 'col-sm-12']);
 						//echo Html::beginTag('div',['class' => 'block-list-news']);
 							echo Html::tag('span','СМИ('.Html::tag('span',count($subject->news),['class' => 'number']).'): ',['style' => 'font-size: 16px;']) ;
-							//echo $subject->titleSmi('list');
+							echo $subject->titleSmi('list');
 						//echo Html::endTag('span');
 						
 					echo Html::endTag('div');	
