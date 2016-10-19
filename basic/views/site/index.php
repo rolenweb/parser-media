@@ -7,7 +7,7 @@ $this->registerJsFile('//cdn.tinymce.com/4/tinymce.min.js', ['depends' => [\yii\
 
 echo Html::beginTag('div',['class' => 'row']);
     echo Html::beginTag('div',['class' => 'col-sm-12']);
-        echo Html::beginTag('div',['class' => 'table-responsive']);
+        echo Html::beginTag('div',['class' => '']);
             echo Html::beginTag('table',['class' => 'table table-bordered']);
                 echo Html::beginTag('col',['width' => '330', 'valign' => 'top']);
                 echo Html::beginTag('col',['width' => '500', 'valign' => 'top']);
