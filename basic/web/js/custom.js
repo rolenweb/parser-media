@@ -10,7 +10,7 @@ $(function() {
 		loadDetailsSubject(sigle_subject);
 		numberSubjectReplace(sigle_subject);
 		
-		tinyMCE.activeEditor.setContent('<p></p>');
+		//tinyMCE.activeEditor.setContent('<p></p>');
 	});
 
 	function activeSingleSubject(obj) {
