@@ -38,6 +38,14 @@ div.container div.block-list-subject div.block-list-news {
 div.container div.block-list-rss ul li.li-rss {
   cursor: pointer;
 }
+div.container div.block-list-peview-rss {
+  height: 830px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+div.container div.block-list-peview-rss ul li.title-news {
+  cursor: pointer;
+}
 div.container div.block-list-mail ul li.li-mail {
   cursor: pointer;
 }

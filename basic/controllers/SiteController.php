@@ -328,8 +328,26 @@ class SiteController extends Controller
                             ['status' => Sourse::STATUS_ACTIVE]            
                     ]
                 )->all();
-                return $this->renderAjax('rss/_list', [
-                    'rss' => $rss,
+
+                $news = News::find()->joinWith(['sourse'])->where([
+                        'and',
+                            [
+                                'sourse.type' => Sourse::TYPE_RSS,
+                                'sourse.status' => Sourse::STATUS_ACTIVE,
+                            ],
+                            [
+                                'or',
+                                    [
+                                        'news.status' => News::STATUS_SPIDER
+                                    ],
+                                    [
+                                        'news.status' => News::STATUS_CRAWLER  
+                                    ]
+                                
+                            ],
+                    ])->orderBy(['news.time' => SORT_DESC])->all();
+                return $this->renderAjax('rss/_list_preview_news', [
+                    'news' => $news,
                     
                 ]);
             }
@@ -362,6 +380,7 @@ class SiteController extends Controller
 
             $post_data = Yii::$app->request->post();
 
+
             if (!isset($post_data)) {
                 $error[] = 'The post data is not set';
                 return $this->renderAjax('_result', [
@@ -369,10 +388,17 @@ class SiteController extends Controller
                 ]);
             }
 
-            $rss = Sourse::findOne($post_data['rss']);
+            if (empty($post_data['news'])) {
+                $error[] = 'The news id is not set';
+                return $this->renderAjax('_result', [
+                    'error' => $error,
+                ]);   
+            }
 
-            if ($rss === null) {
-                $error[] = 'The rss is not found';
+            $news = News::findAll($post_data['news']);
+
+            if (empty($news)) {
+                $error[] = 'The news is not found';
                 return $this->renderAjax('_result', [
                     'error' => $error,
                 ]);
@@ -380,7 +406,7 @@ class SiteController extends Controller
             
 
             return $this->renderAjax('rss/_single_details', [
-                    'rss' => $rss,
+                    'news' => $news,
                     //'keywords_stats' => $subject->phraseStats(),
             ]);
             

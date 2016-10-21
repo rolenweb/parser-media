@@ -24,11 +24,11 @@ $(function() {
 	}
 
 	function titleSubjectReplace(obj) {
-		home.find('th[name = "title-subject"]').text(obj.find('h4[name = "title-silgle-subject"]').text());
+		home.find('th[name = "title-subject"]').text(obj.find('h4').text());
 	}
 
 	function titleSubjectTemplate(obj) {
-		home.find('div[name = "block-template-news"] textarea[name = "title"]').val(obj.find('h4[name = "title-silgle-subject"]').text());
+		home.find('div[name = "block-template-news"] textarea[name = "title"]').val(obj.find('h4').text());
 	}
 
 	function numberSubjectReplace(obj) {
@@ -177,9 +177,11 @@ $(function() {
         
 	}
 
-	home.on('click', 'td[name = "td-left-area"] div.block-list-rss li.li-rss',function( event ) {	
+	home.on('click', 'td[name = "td-left-area"] div.block-list-peview-rss li.title-news',function( event ) {	
 		var li = $(this);
 		loadDetailsRss(li);
+		titleSubjectReplace(li);
+		titleSubjectTemplate(li);
 	});
 
 	function loadDetailsRss(obj) {
@@ -188,7 +190,7 @@ $(function() {
 		$.post(
             '/site/load-details-rss',
             {
-            	rss: obj.attr('rss')
+            	news: obj.attr('news')
             }
         ).done(function( data ) {
             	block_reload.html(data);
@@ -203,6 +205,7 @@ $(function() {
 	home.on('click', 'td[name = "td-left-area"] div.block-list-mail li.li-mail',function( event ) {	
 		var li = $(this);
 		loadDetailsMail(li);
+		
 	});
 
 	function loadDetailsMail(obj) {
