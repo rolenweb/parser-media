@@ -180,7 +180,7 @@ class Subject extends \yii\db\ActiveRecord
                 $words = $this->deleleElementFromArray(explode(' ',$text),3);
                 //var_dump(mb_detect_encoding($text));
                 //die;
-                $exact_match = $this->filerN($this->count_combinations($words, 3),2);
+                $exact_match = $this->filerN($this->count_combinations($words, 1),2);
                 
                 if (empty($exact_match) !== false) {
                     $exact_match = $this->filerN($this->count_combinations($this->deleleElementFromArray(explode(' ',$text),3), 2),2);
@@ -283,6 +283,9 @@ class Subject extends \yii\db\ActiveRecord
             'его',
             'во',
             'всех',
+            'еще',
+            'на',
+            'не',
 
         ];
     }
