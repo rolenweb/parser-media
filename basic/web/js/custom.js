@@ -6,10 +6,11 @@ $(function() {
 		var sigle_subject = $(this).parents('div[name = "sigle-subject"]');
 		activeSingleSubject(sigle_subject);
 		titleSubjectReplace(sigle_subject);
-		titleSubjectTemplate(sigle_subject)
+		titleSubjectTemplate(sigle_subject);
 		loadDetailsSubject(sigle_subject);
 		numberSubjectReplace(sigle_subject);
-		
+		changeContentTemplate();
+
 		//tinyMCE.activeEditor.setContent('<p></p>');
 	});
 
@@ -28,7 +29,28 @@ $(function() {
 	}
 
 	function titleSubjectTemplate(obj) {
-		home.find('div[name = "block-template-news"] textarea[name = "title"]').val(obj.find('h4').text());
+
+		if (home.find('div[name = "block-template-news"] textarea[name = "title"]').val().length !== 0) {
+			if (confirm('Сохранить заголовок?')) {
+		    // Save it!
+			} else {
+			    home.find('div[name = "block-template-news"] textarea[name = "title"]').val(obj.find('h4').text());
+			}
+		}else{
+			home.find('div[name = "block-template-news"] textarea[name = "title"]').val(obj.find('h4').text());
+		}
+		
+	}
+
+	function changeContentTemplate() {
+			if (tinyMCE.activeEditor.getContent().length !== 0) {
+				if (confirm('Сохранить текст?')) {
+			    // Save it!
+				} else {
+				    tinyMCE.activeEditor.setContent('<p></p>');
+				}	
+			}
+			
 	}
 
 	function numberSubjectReplace(obj) {
