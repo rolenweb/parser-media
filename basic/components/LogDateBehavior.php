@@ -47,12 +47,16 @@ class LogDateBehavior extends Behavior
             $log_data = [];
             $par_data = [];
             $old_art = $this->owner->oldAttributes;
+
             foreach ($this->owner->attributes as $key => $attribute) {
-                if ($attribute !== $old_art[$key]) {
-                    $log_data[$key]['from'] = $old_art[$key];
-                    $log_data[$key]['to'] = $attribute;
-                    
+                if (empty($old_art[$key]) === false) {
+                    if ($attribute !== $old_art[$key]) {
+                        $log_data[$key]['from'] = $old_art[$key];
+                        $log_data[$key]['to'] = $attribute;
+                        
+                    }
                 }
+                
                 
             }
             

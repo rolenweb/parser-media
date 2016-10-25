@@ -39,38 +39,43 @@ class SubjectParserController extends BaseCommand
      */
     public function actionIndex()
     {
+        $i = 0;
+        for (;;) { 
 
-        for ($i=0; $i < 100000000; $i++) { 
             $this->success("Iteration: ".$i);
-            $sourse = Sourse::findOne(['name' => 'yandex']);
-            if ($sourse === NULL) {
-                $this->error('Sourse not found');
+            $sourses = Sourse::find()->where(['and',['like', 'name','yandex'],['status' => Sourse::STATUS_ACTIVE]])->all();
+            
+            if (empty($sourses)) {
+                $this->error('Sourses not found');
                 return;
             }
-            if (empty($sourse->keysParse) === false) {
-                foreach ($sourse->keysParse as $key) {
-                    $parse_url = $sourse->urlParse($key);
+            foreach ($sourses as $sourse) {
+                if (empty($sourse->keysParse) === false) {
+                    foreach ($sourse->keysParse as $key) {
+                        $parse_url = $sourse->urlParse($key);
+                        
+                        $this->success("parse url: ".$parse_url);
+                        $content = $this->gom_yt($parse_url);
+                    }
+                }else{
+                    $parse_url = $sourse->urlParse();
                     $this->success("parse url: ".$parse_url);
                     $content = $this->gom_yt($parse_url);
                 }
-            }else{
-                $parse_url = $sourse->urlParse();
-                $this->success("parse url: ".$parse_url);
-                $content = $this->gom_yt($parse_url);
+            
+                //$content = $this->gom_yt('https://news.yandex.ru/yandsearch?text=&rpt=nnews2&grhow=clutop&catnews=51&catnews=5&catnews=49&catnews=4&catnews=636&within=7&from_day=&from_month=&from_year=&to_day=&to_month=&to_year=&numdoc=30');
+
+                $list_subjesct = $this->listSubject($content);
+
+                $this->parseListSubject($list_subjesct,$sourse);
+                
+                $sourse->fullTextParseYandex2();
+                
             }
             
-            //$content = $this->gom_yt('https://news.yandex.ru/yandsearch?text=&rpt=nnews2&grhow=clutop&catnews=51&catnews=5&catnews=49&catnews=4&catnews=636&within=7&from_day=&from_month=&from_year=&to_day=&to_month=&to_year=&numdoc=30');
-
-            $list_subjesct = $this->listSubject($content);
-
-            $this->parseListSubject($list_subjesct,$sourse);
-
-            $sourse = Sourse::find()->where(['and',['name' => 'yandex'],['status' => Sourse::STATUS_ACTIVE]])->limit(1)->one();
-            if (empty($sourse) === false) {
-                $sourse->fullTextParseYandex2();
-            }
             $this->success("Sleep: 15 мин.");    
             sleep(900);
+            $i++;
         }
     }
 
@@ -160,7 +165,6 @@ class SubjectParserController extends BaseCommand
     {
         $subject = Subject::findOne(['title' => $title]);
         if ($subject === NULL) {
-
             $new_subject = new Subject();
             $new_subject->title = $title;
             $new_subject->url = $url;

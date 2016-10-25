@@ -253,7 +253,7 @@ class Sourse extends \yii\db\ActiveRecord
             ->where([
                     'and',
                         [
-                            'sourse.name' => 'yandex' 
+                            'like', 'sourse.name', 'yandex' 
                         ],
                         [
                             'news_sites.fulltext' => NewsSites::FULLTEXT_YES,
