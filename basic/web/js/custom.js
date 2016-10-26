@@ -267,4 +267,22 @@ $(function() {
       	event.preventDefault();
 	});
 
+	home.on('submit', 'form[name = "find-speaker"]',function( event ) {	
+		var form = $(this);
+		var block_result = home.find('div#speaker div[name = "block-result-search"]');
+		block_result.empty().append('<div class="text-center"><i class = "fa fa-spinner fa-pulse fa-4x"></i></div>');
+		
+        $.post(
+	            '/site/search-speaker',
+	            form.serializeArray()
+	        ).done(function( data ) {
+	          block_result.html(data);
+	          }
+	        ).fail( function(xhr, textStatus, errorThrown) {
+	            alert(xhr.responseText);
+	            }
+	    );
+      	event.preventDefault();
+	});
+
 });

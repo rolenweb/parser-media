@@ -58,6 +58,16 @@ div.container div.pult-details-subject div.row-title {
 div.container div.pult-details-subject div.row-title span.title {
   text-transform: uppercase;
   font-size: 18px;
+  cursor: pointer;
+}
+div.container div.pult-details-subject div.row-title div#speaker div.modal-dialog div.modal-content div.modal-body form.form-inline div.form-group {
+  width: 85%;
+}
+div.container div.pult-details-subject div.row-title div#speaker div.modal-dialog div.modal-content div.modal-body form.form-inline div.form-group input[name="name"] {
+  width: 100%;
+}
+div.container div.pult-details-subject div.row-title div#speaker div.modal-dialog div.modal-content div.modal-body div[name="block-result-search"] {
+  margin-top: 20px;
 }
 div.container div.pult-details-subject div.sort-list-smi {
   margin-left: -9px;

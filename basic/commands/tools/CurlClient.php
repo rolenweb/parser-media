@@ -56,7 +56,17 @@ class CurlClient implements ClientInterface
 			];
 	}
 
+	public function getContentWithInfo2($type = null,$ip = null, $port = null,$reffer = null,$post = 'no')
+	{
+		$this->applySettings2($type,$ip,$port,$reffer,$post);
+		$this->result = curl_exec($this->curl);
+		$this->request_info = curl_getinfo($this->curl);
 
+		return [
+			'result' => $this->result,
+			'info' => $this->request_info,
+			];
+	}
 
 	/**
 	 * @inheritdoc
@@ -86,9 +96,60 @@ class CurlClient implements ClientInterface
 		curl_setopt($this->curl, CURLOPT_FOLLOWLOCATION, true); // Follow redirects
 	}
 
+	protected function applySettings2($type = null,$ip = null, $port = null,$reffer = null,$post = 'no')
+	{
+		if (empty($this->url)) {
+			throw new InvalidConfigException('URL should be specified');
+		}
+
+		array_map('unlink', glob("cookiefile/*"));
+		$ckfile = tempnam("cookiefile", "CURLCOOKIE");
+        $useragent = 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/533.2 (KHTML, like Gecko) Chrome/5.0.342.3 Safari/533.2';
+
+        //$f = fopen('cookiefile/log.txt', 'w'); // file to write request 
+
+		curl_setopt($this->curl, CURLOPT_URL, $this->url);
+		curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($this->curl, CURLOPT_MAXREDIRS, $this->max_redirects);
+		curl_setopt($this->curl, CURLOPT_HTTPHEADER, ['Expect:']);
+		curl_setopt($this->curl, CURLOPT_TIMEOUT, $this->timeout);
+		curl_setopt($this->curl, CURLOPT_FOLLOWLOCATION, true); // Follow redirects
+		curl_setopt($this->curl, CURLOPT_COOKIEJAR, $ckfile);
+		curl_setopt($this->curl, CURLOPT_USERAGENT, $useragent);
+		if ($type === 'socks5') {
+
+			curl_setopt ($this->curl, CURLOPT_PROXY, $ip.':'.$port); 
+         	curl_setopt ($this->curl, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5); 
+		}
+		if ($type === 'socks4') {
+			curl_setopt ($this->curl, CURLOPT_PROXY, $ip.':'.$port); 
+         	curl_setopt ($this->curl, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS4); 
+		}
+		if ($reffer !== null) {
+			curl_setopt ($this->curl, CURLOPT_REFERER, $reffer); 	
+		}
+		if ($post === 'yes') {
+			curl_setopt($this->curl, CURLOPT_POST, 1);
+			curl_setopt($this->curl, CURLOPT_HTTPHEADER, array("X-Requested-With: XMLHttpRequest", "Content-Type: application/json; charset=utf-8"));
+		}
+	}
+
 	public function parsePage($url)
 	{	
 		$content = $this->setUrl($url)->getContentWithInfo();
+		if (empty($content['info']['http_code']) === false) {
+			if ($content['info']['http_code'] === 200) {
+				if (empty($content['result']) === false) {
+					return $content['result'];
+				}
+			}
+		}
+		return;
+	}
+
+	public function parsePage2($url,$type = null,$ip = null, $port = null,$reffer = null,$post = 'no')
+	{	
+		$content = $this->setUrl($url)->getContentWithInfo2();
 		if (empty($content['info']['http_code']) === false) {
 			if ($content['info']['http_code'] === 200) {
 				if (empty($content['result']) === false) {

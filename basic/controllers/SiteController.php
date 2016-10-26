@@ -14,6 +14,8 @@ use app\models\News;
 use app\models\NewsSites;
 use app\models\Post;
 
+use app\commands\tools\CurlClient;
+
 class SiteController extends Controller
 {
     /**
@@ -24,7 +26,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout','index','login','load-details-subject','processed-subject','reload-left-area','processed-news','create-news'],
+                'only' => ['logout','index','login','load-details-subject','processed-subject','reload-left-area','processed-news','create-news','search-speaker'],
                 'rules' => [
                     [
                         'actions' => ['logout'],
@@ -37,7 +39,7 @@ class SiteController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['index','load-details-subject','processed-subject','reload-left-area','processed-news','create-news'],
+                        'actions' => ['index','load-details-subject','processed-subject','reload-left-area','processed-news','create-news','search-speaker'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
@@ -522,4 +524,120 @@ class SiteController extends Controller
         }
     }
     
+    public function actionSearchSpeaker()
+    {
+        if(Yii::$app->request->isAjax){
+
+            $error = [];
+            $info = [];
+
+            $post_data = Yii::$app->request->post();
+
+            if (!isset($post_data)) {
+                $error[] = 'The post data is not set';
+                return $this->renderAjax('_result', [
+                    'error' => $error,
+                ]);
+            }
+
+            if (empty($post_data['name'])) {
+                $error[] = 'The name is null';
+                return $this->renderAjax('_result', [
+                    'error' => $error,
+                ]);
+            }
+            $client = new CurlClient();
+            
+            $useragent = 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/533.2 (KHTML, like Gecko) Chrome/5.0.342.3 Safari/533.2';
+            array_map('unlink', glob("cookiefile/*"));
+            $ckfile = tempnam(Yii::getAlias('@app')."/cookiefile", "CURLCOOKIE");
+            $f = fopen(Yii::getAlias('@app').'/cookiefile/log.txt', 'w'); 
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
+            curl_setopt($ch, CURLOPT_COOKIEJAR, $ckfile);
+            curl_setopt($ch, CURLOPT_COOKIEFILE, $ckfile);
+            curl_setopt($ch, CURLOPT_URL, 'http://www.nutcall.com/');
+            curl_setopt($ch, CURLOPT_REFERER, 'http://www.nutcall.com/');
+            
+            $webpage = curl_exec($ch);
+            curl_close($ch);
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
+            curl_setopt($ch, CURLOPT_COOKIEJAR, $ckfile);
+            curl_setopt($ch, CURLOPT_COOKIEFILE, $ckfile);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch,CURLOPT_VERBOSE,true);
+            curl_setopt($ch,CURLOPT_STDERR ,$f);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array("X-Requested-With: XMLHttpRequest", "Accept: application/json, text/javascript, */*; q=0.01", "Accept-Encoding: gzip, deflate", "Accept-Language: en-US,en;q=0.8","Content-Type: application/x-www-form-urlencoded; charset=UTF-8","Origin: http://www.nutcall.com"));
+            curl_setopt($ch, CURLOPT_POSTFIELDS, 'action=login&email=rufrom@gmail.com&password=1233213&tmp=1');
+            curl_setopt($ch, CURLOPT_URL, 'http://www.nutcall.com/users/?do=ajax');
+            curl_setopt($ch, CURLOPT_REFERER, 'http://www.nutcall.com');
+
+            $webpage = curl_exec($ch);
+            
+            //var_dump($webpage);
+            curl_close($ch);
+
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
+            curl_setopt($ch, CURLOPT_COOKIEJAR, $ckfile);
+            curl_setopt($ch, CURLOPT_COOKIEFILE, $ckfile);
+            curl_setopt($ch, CURLOPT_URL, 'http://www.nutcall.com/');
+            curl_setopt($ch, CURLOPT_REFERER, 'http://www.nutcall.com/');
+            
+            $webpage = curl_exec($ch);
+
+            //var_dump($webpage);
+
+            curl_close($ch);
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
+            curl_setopt($ch, CURLOPT_COOKIEJAR, $ckfile);
+            curl_setopt($ch, CURLOPT_COOKIEFILE, $ckfile);
+            curl_setopt($ch, CURLOPT_URL, 'http://www.nutcall.com/ru/search/?s=all&q='.urlencode($post_data['name']));
+            curl_setopt($ch, CURLOPT_REFERER, 'http://www.nutcall.com/');
+            
+            $webpage = curl_exec($ch);
+            
+            curl_close($ch);
+
+            //var_dump($webpage);
+            $names = $client->parseProperty($webpage,'string','div.shortlist-block-item div.info div.name a');
+            $notes = $client->parseProperty($webpage,'string','div.shortlist-block-item div.info div.note');
+            //$tags = $client->parseProperty($webpage,'string','div.shortlist-block-item div.info div.tags');
+
+            $photos = $client->parseProperty($webpage,'attribute','div.shortlist-block-item div.photo a img',null,'src');
+            
+
+            
+            return $this->renderAjax('subject/modal/_result_search', [
+                    'names' => $names,
+                    'notes' => $notes,
+                    'photos' => $photos,
+
+            ]);
+            
+            
+
+        }
+        else{
+            Yii::$app->session->setFlash('error', 'Fuck, hands off of this page.');
+            return $this->redirect(['site/index']);
+        }
+    }
 }
