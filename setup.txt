@@ -1,6 +1,7 @@
 1. clone git https://github.com/rolenweb/parser-media.git
 2. в папке config сделать копию db_copy.php и переименовать его db.php
 3. в db.php прописать данные конекта к базе
+4. установить composer в папку basic 
 
 1. php yii migrate --migrationPath=@yii/rbac/migrations/
 2. php yii migrate

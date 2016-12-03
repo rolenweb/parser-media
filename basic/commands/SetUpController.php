@@ -26,6 +26,6 @@ class SetUpController extends Controller
      */
     public function actionIndex()
     {
-        
+        var_dump(Yii::$app->request->baseUrl);
     }
 }
