@@ -13,3 +13,6 @@
 1: php yii subject-parser // если использовать nohup то будет работать фоном nohup php yii subject-parser > nohup.out &
 2: php yii rss-parser // php yii rss-parser > nohup2.out &
 
+
+Если устанавливать из архива, то нужно выполнить пункты: 3,9 и 10
+
