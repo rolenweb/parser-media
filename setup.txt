@@ -1,10 +1,15 @@
 1. clone git https://github.com/rolenweb/parser-media.git
-2. в папке config сделать копию db_copy.php и переименовать его db.php
+2. в папке config сделать копию db_copy.php и переименовать его db.php, тоже самое сделать с файлом params_copy.php
 3. в db.php прописать данные конекта к базе
 4. установить composer в папку basic 
+5. запустить php composer.phar update
+6. php yii set-up
+7. chmod -R 777 runtime
+8. chmod -R 777 assets в папке web
+9. экспортировать базу из папки dump
+10. в таблице setting сменить ключ антигейта
 
-1. php yii migrate --migrationPath=@yii/rbac/migrations/
-2. php yii migrate
-3. php yii set-up-role
-4. chmod -R 777 runtime
-5. chmod -R 777 assets
+Запуск из папки basic: 
+1: php yii subject-parser // если использовать nohup то будет работать фоном nohup php yii subject-parser > nohup.out &
+2: php yii rss-parser // php yii rss-parser > nohup2.out &
+
